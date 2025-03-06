@@ -124,7 +124,11 @@ NavMeshSettings:
   m_NavMeshData: {fileID: 0}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &73107396
+=======
+--- !u!1 &136571358
+>>>>>>> Stashed changes
 =======
 --- !u!1 &136571358
 >>>>>>> Stashed changes
@@ -135,6 +139,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   - component: {fileID: 73107397}
   m_Layer: 0
@@ -147,14 +152,25 @@ GameObject:
   m_Layer: 0
   m_Name: Cube
 >>>>>>> Stashed changes
+=======
+  - component: {fileID: 136571362}
+  - component: {fileID: 136571361}
+  - component: {fileID: 136571360}
+  - component: {fileID: 136571359}
+  m_Layer: 0
+  m_Name: Cube
+>>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!4 &73107397
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!65 &136571359
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -227,6 +243,9 @@ MeshFilter:
   m_GameObject: {fileID: 136571358}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &136571362
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 Transform:
   m_ObjectHideFlags: 0
@@ -234,7 +253,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_GameObject: {fileID: 73107396}
+=======
+  m_GameObject: {fileID: 136571358}
+>>>>>>> Stashed changes
 =======
   m_GameObject: {fileID: 136571358}
 >>>>>>> Stashed changes
@@ -247,9 +270,13 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &393366288
 =======
 --- !u!1 &136571358
+>>>>>>> Stashed changes
+=======
+--- !u!1 &263676157
 >>>>>>> Stashed changes
 =======
 --- !u!1 &263676157
@@ -261,6 +288,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   - component: {fileID: 136571362}
   - component: {fileID: 136571361}
@@ -367,6 +395,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   - component: {fileID: 263676160}
@@ -783,6 +813,7 @@ SceneRoots:
   m_Roots:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 2008889018}
@@ -791,12 +822,17 @@ SceneRoots:
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   - {fileID: 263676160}
   - {fileID: 511835306}
   - {fileID: 1020589204}
   - {fileID: 136571362}
   - {fileID: 598102081}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
