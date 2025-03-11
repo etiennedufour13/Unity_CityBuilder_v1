@@ -15,6 +15,8 @@ public class CameraController : MonoBehaviour
     private bool isPanning = false;
     private Vector3 panStartPoint;
 
+    public LayerMask groundLayer;
+
     void Start()
     {
         cam = Camera.main;
@@ -89,7 +91,7 @@ void HandleRotation()
     Vector3 GetMousePivotPoint()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
             return hit.point;
         }
@@ -99,7 +101,7 @@ void HandleRotation()
     Vector3 GetPivotPoint()
     {
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
             return hit.point;
         }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class BuildingPlacer : MonoBehaviour
     private float rotationY = 0f;
     private bool isValidPlacement = false;
     private MaterialController materialController;
+    public List<string> forbiddenTags = new List<string> { "Building", "Path" };
+    private HashSet<GameObject> overlappingObjects = new HashSet<GameObject>();
 
     void Update()
     {
@@ -22,36 +26,42 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    // script lancé par le bouton dans l'interface : création de la preview
-    public void SelectBuilding(BuildingData building) //building = préfab du building choisit
+    public void SelectBuilding(BuildingData building)
     {
-        //création de la nouvelle instance
         if (previewInstance != null) Destroy(previewInstance);
         selectedBuilding = building;
         previewInstance = Instantiate(building.prefab);
-        //previewInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
+        //changement du layermask pour ne pas capter le raycast
+        previewInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
+        foreach (Transform child in transform) child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-        //reliage avec le système visuel de la preview
-        //délais pour éviter un bug (de chargement trop tôt)
-        StartCoroutine(InitializeMaterialController());
-    }
-        private IEnumerator InitializeMaterialController()
+        Rigidbody rb = previewInstance.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+
+        Collider previewCollider = previewInstance.GetComponent<Collider>();
+        if (previewCollider != null)
         {
-            yield return null; // Attend un frame pour que Start() dans MaterialController s'exécute
-
-            materialController = previewInstance.GetComponentInChildren<MaterialController>();
-
-            if (materialController != null)
-            {
-                materialController.SetTransparent(true);
-            }
-            else
-            {
-                Debug.LogError("MaterialController introuvable sur le prefab sélectionné !");
-            }
+            previewCollider.isTrigger = true;
         }
 
-    // suivit de la preview sur la souris
+        StartCoroutine(InitializeMaterialController());
+    }
+
+    private IEnumerator InitializeMaterialController()
+    {
+        yield return null;
+        materialController = previewInstance.GetComponentInChildren<MaterialController>();
+        if (materialController != null)
+        {
+            materialController.SetTransparent(true);
+        }
+        else
+        {
+            Debug.LogError("MaterialController introuvable sur le prefab sélectionné !");
+        }
+    }
+
     void UpdatePreviewPosition()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -60,21 +70,40 @@ public class BuildingPlacer : MonoBehaviour
             previewInstance.transform.position = hit.point;
             previewInstance.transform.rotation = Quaternion.Euler(0, rotationY, 0);
 
-            isValidPlacement = CheckPlacementValidity();
+            overlappingObjects.Clear();
+            BoxCollider boxCol = previewInstance.GetComponent<BoxCollider>();
+            if (boxCol != null)
+            {
+                Vector3 worldCenter = previewInstance.transform.TransformPoint(boxCol.center);
+                Vector3 halfExtents = Vector3.Scale(boxCol.size, previewInstance.transform.lossyScale) * 0.5f;
+                Collider[] hits = Physics.OverlapBox(worldCenter, halfExtents, previewInstance.transform.rotation);
+
+                foreach (var hitCol in hits)
+                {
+                    if (!hitCol.transform.IsChildOf(previewInstance.transform) && forbiddenTags.Contains(hitCol.tag))
+                    {
+                        overlappingObjects.Add(hitCol.gameObject);
+                    }
+                }
+            }
+
+            isValidPlacement = overlappingObjects.Count == 0;
             if (materialController != null) materialController.SetCollisionState(!isValidPlacement);
         }
     }
 
-    //input de rotation
     void HandleRotation()
     {
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.R) && !Input.GetKey(KeyCode.LeftShift))
         {
             rotationY += 100f * Time.deltaTime;
         }
+        else if (Input.GetKey(KeyCode.R) && Input.GetKey(KeyCode.LeftShift))
+        {
+            rotationY += -100f * Time.deltaTime;
+        }
     }
 
-    //input de rotation
     void HandlePlacement()
     {
         if (Input.GetMouseButtonDown(0) && isValidPlacement)
@@ -90,22 +119,20 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    //vérification des collisions de placement
-    bool CheckPlacementValidity()
+    void OnDrawGizmos()
     {
-        Collider previewCollider = previewInstance.GetComponent<Collider>();
-        if (previewCollider == null) return false;
-
-        Collider[] colliders = Physics.OverlapBox(previewCollider.bounds.center, previewCollider.bounds.extents, previewInstance.transform.rotation);
-
-        foreach (Collider col in colliders)
+        if (previewInstance != null)
         {
-            if (col.gameObject != previewInstance && col.CompareTag("Building")) // Vérifie uniquement les bâtiments
+            BoxCollider boxCol = previewInstance.GetComponent<BoxCollider>();
+            if (boxCol != null)
             {
-                return false; // Placement invalide
+                Vector3 worldCenter = previewInstance.transform.TransformPoint(boxCol.center);
+                Vector3 halfExtents = Vector3.Scale(boxCol.size, previewInstance.transform.lossyScale) * 0.5f;
+
+                Gizmos.color = Color.red;
+                Gizmos.matrix = Matrix4x4.TRS(worldCenter, previewInstance.transform.rotation, Vector3.one);
+                Gizmos.DrawWireCube(Vector3.zero, halfExtents * 2);
             }
         }
-        return true; // Placement valide
     }
-
 }
