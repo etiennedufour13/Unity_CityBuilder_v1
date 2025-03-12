@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using LibTessDotNet;
+using System.Linq;
 
 [RequireComponent(typeof(LineRenderer))]
 public class RoadBuilder : MonoBehaviour
@@ -13,20 +15,28 @@ public class RoadBuilder : MonoBehaviour
     private LineRenderer lineRenderer;
     private LineRenderer pointRenderer;
     private bool isBuilding = false;
-    private float closeDistanceThreshold = 0.5f; // Distance pour fermer la route
+    private float closeDistanceThreshold = 0.2f; // Distance pour fermer la route
 
     //Dot de visualisation
     public GameObject visualPointPrefab;
     private GameObject visualPoint;
 
-    //système de vérification du temps de clic droit
+    //systï¿½me de vï¿½rification du temps de clic droit
     private float currentClickTime;
     private bool clicDroit;
     public float maxClickTime;
 
+    //snaping variables
+    public float snapDetectionRadius = 3f;
+    public float snapPointRadius = 0.2f;
+    public GameObject snapPoint;
+    public GameObject firstPoint;
+
+
+
     void Start()
     {
-        //setup du système de line
+        //setup du systï¿½me de line
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
         lineRenderer.startWidth = 0.08f; //visuel
@@ -39,13 +49,21 @@ public class RoadBuilder : MonoBehaviour
 
         UpdateCurrentPointMarker();
         CheckInput();
+        CheckSnapPoints();
 
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
             visualPoint.SetActive(true);
-            visualPoint.transform.position = new Vector3 (hit.point.x, hit.point.y + 0.0002f, hit.point.z);
+
+            if (snapPoint != null)
+            {
+                visualPoint.transform.position = snapPoint.transform.position + Vector3.up * 0.01f;
+            }
+            else {
+                visualPoint.transform.position = new Vector3 (hit.point.x, hit.point.y + 0.0002f, hit.point.z);
+            }
         }
         else
         {
@@ -60,10 +78,10 @@ public class RoadBuilder : MonoBehaviour
             AddPoint();
         }
 
-        //clic droit (doit être rapide pour ne pas être confondu avec un déplacement)
+        //clic droit (doit ï¿½tre rapide pour ne pas ï¿½tre confondu avec un dï¿½placement)
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("entré");
+            Debug.Log("entrï¿½");
             clicDroit = true;
             currentClickTime = 0;
         }
@@ -78,6 +96,55 @@ public class RoadBuilder : MonoBehaviour
             StartAndStopBuilding(false);
         }
     }
+
+private void CheckSnapPoints()
+{
+    snapPoint = null; // RÃ©initialisation Ã  chaque frame
+    List<Transform> snapPoints = new List<Transform>();
+
+    // Lancer un raycast depuis la souris
+    Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
+    {
+        Vector3 raycastPosition = hit.point;
+
+        // DÃ©tection des objets "Path" autour de la position du raycast
+        Collider[] colliders = Physics.OverlapSphere(raycastPosition, snapDetectionRadius);
+
+        foreach (Collider col in colliders)
+        {
+            if (col.CompareTag("Path"))
+            {
+                Transform snapContainer = col.transform.Find("SnapPoints");
+                if (snapContainer != null)
+                {
+                    foreach (Transform child in snapContainer)
+                    {
+                        snapPoints.Add(child);
+                    }
+                }
+            }
+        }
+
+        // Ajout du premier point en cours de traÃ§age comme snap point
+        if (firstPoint != null)
+        {
+            snapPoints.Add(firstPoint.transform);
+        }
+
+        // SÃ©lection du point le plus proche respectant le seuil
+        if (snapPoints.Count > 0)
+        {
+            Transform closest = snapPoints.OrderBy(p => Vector3.Distance(p.position, raycastPosition)).First();
+            if (Vector3.Distance(closest.position, raycastPosition) < snapPointRadius)
+            {
+                snapPoint = closest.gameObject;
+            }
+        }
+    }
+}
+
+
 
     public void StartAndStopBuilding(bool isStarting)
     {
@@ -94,6 +161,11 @@ public class RoadBuilder : MonoBehaviour
             lineRenderer.positionCount = 0;
             Destroy(visualPoint);
             isBuilding = false;
+            if (firstPoint != null)
+            {
+                Destroy(firstPoint);
+                firstPoint = null;
+            }
         }
     }
 
@@ -102,9 +174,16 @@ public class RoadBuilder : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            Vector3 newPoint = hit.point + Vector3.up * 0.01f; // Légèrement surélevé
 
-            // Vérifie si le premier et dernier point sont proches pour fermer la route
+            Vector3 newPoint = (snapPoint != null) ? snapPoint.transform.position + Vector3.up * 0.01f : hit.point + Vector3.up * 0.01f;
+
+            if (points.Count == 0)
+            {
+                firstPoint = new GameObject("FirstSnapPoint");
+                firstPoint.transform.position = newPoint;
+            }
+
+            // Vï¿½rifie si le premier et dernier point sont proches pour fermer la route
             if (points.Count > 2 && Vector3.Distance(newPoint, points[0]) < closeDistanceThreshold)
             {
                 CloseRoad();
@@ -122,18 +201,19 @@ public class RoadBuilder : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            Vector3 hoverPoint = hit.point + Vector3.up * 0.01f; // Légèrement surélevé
+            Vector3 hoverPoint = hit.point + Vector3.up * 0.01f; // Lï¿½gï¿½rement surï¿½levï¿½         
 
             if (points.Count > 0)
             {
                 lineRenderer.positionCount = points.Count + 1;
                 Vector3[] allPoints = new Vector3[points.Count + 1];
                 points.CopyTo(allPoints);
-                allPoints[points.Count] = hoverPoint;
+                allPoints[points.Count] = (snapPoint != null) ? snapPoint.transform.position + Vector3.up * 0.01f : hoverPoint;
                 lineRenderer.SetPositions(allPoints);
             }
         }
     }
+
 
     private void CloseRoad()
     {
@@ -151,28 +231,58 @@ public class RoadBuilder : MonoBehaviour
         MeshCollider meshCollider = road.AddComponent<MeshCollider>();
         meshRenderer.material = roadMaterial;
 
-        Mesh mesh = new Mesh();
-        mesh.vertices = points.ToArray();
-
-        // Triangulation automatique (simplifié pour l'exemple)
-        List<int> triangles = new List<int>();
-        for (int i = 1; i < points.Count - 1; i++)
+        // Conversion des points en 2D
+        ContourVertex[] contour = new ContourVertex[points.Count];
+        for (int i = 0; i < points.Count; i++)
         {
-            triangles.Add(0);
-            triangles.Add(i);
-            triangles.Add(i + 1);
+            Vector3 p = points[i];
+            contour[i].Position = new Vec3 { X = p.x, Y = p.z, Z = 0 }; // On utilise XZ
         }
 
-        mesh.triangles = triangles.ToArray();
+        // Triangulation
+        Tess tess = new Tess();
+        tess.AddContour(contour, ContourOrientation.Original);
+        tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
+
+        // Construction du mesh Unity
+        Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
+        for (int i = 0; i < tess.Vertices.Length; i++)
+        {
+            Vec3 v = tess.Vertices[i].Position;
+            meshVertices[i] = new Vector3(v.X, points[0].y, v.Y); // Y fixe (XZ plane)
+        }
+
+        int[] meshTriangles = new int[tess.ElementCount * 3];
+        for (int i = 0; i < tess.ElementCount; i++)
+        {
+            meshTriangles[i * 3] = tess.Elements[i * 3];
+            meshTriangles[i * 3 + 1] = tess.Elements[i * 3 + 1];
+            meshTriangles[i * 3 + 2] = tess.Elements[i * 3 + 2];
+        }
+
+        UnityEngine.Mesh mesh = new UnityEngine.Mesh();
+
+        mesh.vertices = meshVertices;
+        mesh.triangles = meshTriangles;
         mesh.RecalculateNormals();
 
         meshFilter.mesh = mesh;
-        meshCollider.sharedMesh = mesh; // Assigne correctement le Mesh au Collider
+        meshCollider.sharedMesh = mesh;
 
-        //ajout du MaterialController
         road.AddComponent<MaterialController>();
 
-        //efface le line renderer
+        // CrÃ©e un GameObject enfant par sommet
+        GameObject pointsContainer = new GameObject("SnapPoints");
+        pointsContainer.transform.parent = road.transform;
+
+        foreach (Vector3 point in mesh.vertices)
+        {
+            GameObject snapPoint = new GameObject("SnapPoint");
+            snapPoint.transform.parent = pointsContainer.transform;
+            snapPoint.transform.position = road.transform.TransformPoint(point);
+        }
+
+        //fin du code
         StartAndStopBuilding(false);
     }
 }

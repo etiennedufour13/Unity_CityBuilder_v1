@@ -2145,9 +2145,13 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  roadMaterial: {fileID: 2100000, guid: 0309701be3327c24487d1856bea7a536, type: 2}
+  roadMaterial: {fileID: 2100000, guid: 42d8d376c738aa446baf929fc96efde5, type: 2}
   visualPointPrefab: {fileID: 3591870685031198832, guid: 4df51e5adc3108c4cbd4f565d249a8d0, type: 3}
   maxClickTime: 0.1
+  snapDetectionRadius: 3
+  snapPointRadius: 0.2
+  snapPoint: {fileID: 0}
+  firstPoint: {fileID: 0}
 --- !u!120 &1415987738
 LineRenderer:
   serializedVersion: 2
