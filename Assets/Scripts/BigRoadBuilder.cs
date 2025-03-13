@@ -1,55 +1,138 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BigRoadBuilder : MonoBehaviour
 {
-    public LineRenderer lineRenderer;
-    public float pointSpacing = 1f;
+    public GameObject roadPointPrefab; // Prefab du point de route
+    public float pointDistance = 2f; // Distance fixe entre les points
+    public float maxAngle = 90f; // Angle maximum autorisé entre trois points
+    private bool roadBuildingActive = false;
+    private bool rigidMode = false;
+    private List<GameObject> roadPoints = new List<GameObject>();
+    
 
-    private List<Vector3> controlPoints = new List<Vector3>();
-
-    void Start()
-    {
-        if (lineRenderer == null)
-        {
-            lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.positionCount = 0;
-            lineRenderer.startWidth = 0.2f;
-            lineRenderer.endWidth = 0.2f;
-            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        }
-    }
 
     void Update()
     {
+        if (!roadBuildingActive) return;
+
+        if (roadPoints.Count > 0)
+        {
+            UpdateActivePoint();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 newPoint = GetMouseWorldPosition();
-            if (controlPoints.Count == 0 || Vector3.Distance(newPoint, controlPoints[controlPoints.Count - 1]) > pointSpacing)
+            CreateRoadPoint();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            CancelLastPoint();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rigidMode = !rigidMode;
+        }
+    }
+
+    public void ToggleRoadBuilding()
+    {
+        roadBuildingActive = !roadBuildingActive;
+    }
+
+    private void CreateRoadPoint()
+    {
+        Vector3 position = GetMouseWorldPosition();
+        if (roadPoints.Count == 0)
+        {
+            CreatePoint(position); // Point initial
+        }
+        CreatePoint(position); // Nouveau point actif
+    }
+
+    private void CreatePoint(Vector3 position)
+    {
+        GameObject newPoint = Instantiate(roadPointPrefab, position, Quaternion.identity, transform);
+        roadPoints.Add(newPoint);
+    }
+
+    private void UpdateActivePoint()
+    {
+        if (roadPoints.Count < 2) return;
+        
+        GameObject activePoint = roadPoints[roadPoints.Count - 1];
+        GameObject previousPoint = roadPoints[roadPoints.Count - 2];
+
+        Vector3 newPos;
+
+        if (rigidMode && roadPoints.Count > 2)
+        {
+            GameObject secondPreviousPoint = roadPoints[roadPoints.Count - 3];
+            Vector3 direction = (previousPoint.transform.position - secondPreviousPoint.transform.position).normalized;
+            newPos = previousPoint.transform.position + direction * pointDistance;
+        }
+        else
+        {
+            Vector3 mousePos = GetMouseWorldPosition();
+            Vector3 direction = (mousePos - previousPoint.transform.position).normalized;
+            newPos = previousPoint.transform.position + direction * pointDistance;
+        }
+
+        if (roadPoints.Count > 2)
+        {
+            GameObject secondPreviousPoint = roadPoints[roadPoints.Count - 3];
+            if (!IsAngleValid(secondPreviousPoint.transform.position, previousPoint.transform.position, newPos))
             {
-                controlPoints.Add(newPoint);
-                UpdateSpline();
+                return;
             }
         }
-        else if (Input.GetMouseButtonDown(1)) 
+
+        activePoint.transform.position = newPos;
+    }
+
+    private bool IsAngleValid(Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Vector3 dir1 = (p2 - p1).normalized;
+        Vector3 dir2 = (p3 - p2).normalized;
+        float angle = Vector3.Angle(dir1, dir2);
+        return angle <= maxAngle;
+    }
+
+    private void CancelLastPoint()
+    {
+        if (roadPoints.Count == 0) return;
+
+        GameObject lastPoint = roadPoints[roadPoints.Count - 1];
+        roadPoints.RemoveAt(roadPoints.Count - 1);
+        Destroy(lastPoint);
+
+        if (roadPoints.Count == 0)
         {
-            ClearSpline();
+            roadBuildingActive = false;
+            return;
         }
-    }
+        
+        if (roadPoints.Count == 1)
+        {
+            Destroy(roadPoints[0]);
+            roadPoints.Clear();
+            roadBuildingActive = false;
+            return;
+        }
 
-    private void UpdateSpline()
-    {
-        if (controlPoints.Count < 2) return;
-
-        List<Vector3> splinePoints = GenerateSpline(controlPoints, 10);
-        lineRenderer.positionCount = splinePoints.Count;
-        lineRenderer.SetPositions(splinePoints.ToArray());
-    }
-
-    private void ClearSpline()
-    {
-        controlPoints.Clear();
-        lineRenderer.positionCount = 0;
+        GameObject roadSegment = new GameObject("RoadSegment");
+        roadSegment.transform.parent = transform;
+        
+        foreach (var point in roadPoints)
+        {
+            point.transform.parent = roadSegment.transform;
+        }
+        
+        roadPoints.Clear();
+        roadBuildingActive = false;
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -60,37 +143,5 @@ public class BigRoadBuilder : MonoBehaviour
             return hit.point;
         }
         return Vector3.zero;
-    }
-
-    private List<Vector3> GenerateSpline(List<Vector3> points, int resolution)
-    {
-        List<Vector3> spline = new List<Vector3>();
-        for (int i = 0; i < points.Count - 1; i++)
-        {
-            Vector3 p0 = i > 0 ? points[i - 1] : points[i];
-            Vector3 p1 = points[i];
-            Vector3 p2 = points[i + 1];
-            Vector3 p3 = i < points.Count - 2 ? points[i + 2] : points[i + 1];
-
-            for (int j = 0; j <= resolution; j++)
-            {
-                float t = j / (float)resolution;
-                spline.Add(CatmullRom(p0, p1, p2, p3, t));
-            }
-        }
-        return spline;
-    }
-
-    private Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
-    {
-        float t2 = t * t;
-        float t3 = t2 * t;
-
-        return 0.5f * (
-            (2 * p1) +
-            (-p0 + p2) * t +
-            (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
-            (-p0 + 3 * p1 - 3 * p2 + p3) * t3
-        );
     }
 }
