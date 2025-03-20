@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5358121046650990986}
   - component: {fileID: 2101766091713256067}
   - component: {fileID: 7295079852726847541}
+  - component: {fileID: 6123808387873840145}
   m_Layer: 0
   m_Name: basic_shop_blanc_v1-1
   m_TagString: Untagged
@@ -83,6 +84,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6123808387873840145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026901467460133144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb75df412b78174a9349d08987d85d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1922418758447099308
 GameObject:
   m_ObjectHideFlags: 0
