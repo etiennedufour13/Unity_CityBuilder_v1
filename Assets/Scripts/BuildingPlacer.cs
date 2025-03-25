@@ -16,6 +16,16 @@ public class BuildingPlacer : MonoBehaviour
     public List<string> forbiddenTags = new List<string> { "Building", "Path" };
     private HashSet<GameObject> overlappingObjects = new HashSet<GameObject>();
 
+    private bool snapRotationEnabled = false; //système de crantage
+    public float snapAngle = 30f; //degré de crantage
+    float rotationSpeed = 500f; // Vitesse en degrés par seconde
+    float targetRotationY; // pour stocket la rotation de manière temporaire
+
+    public bool gridPlacementEnabled;
+    int buildingWidth, buildingLength; // utilisé pour la grille
+    public float gridSize = 1f; //taille de la grille
+
+
     void Update()
     {
         if (previewInstance != null)
@@ -39,6 +49,11 @@ public class BuildingPlacer : MonoBehaviour
         rb.isKinematic = true;
         rb.useGravity = false;
 
+        //récupération de la taille du bat
+        buildingWidth = selectedBuilding.gridWidth;
+        buildingLength = selectedBuilding.gridLength;
+
+
         Collider previewCollider = previewInstance.GetComponent<Collider>();
         if (previewCollider != null)
         {
@@ -58,7 +73,7 @@ public class BuildingPlacer : MonoBehaviour
         }
         else
         {
-            Debug.LogError("MaterialController introuvable sur le prefab s�lectionn� !");
+            Debug.LogError("MaterialController introuvable sur le prefab s�lectionn� !");
         }
     }
 
@@ -67,7 +82,26 @@ public class BuildingPlacer : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            previewInstance.transform.position = hit.point;
+            Vector3 targetPosition = hit.point;
+
+            if (gridPlacementEnabled)
+            {
+                float gridSize = 1f; // Taille de la grille, à ajuster selon ton jeu
+                int buildingWidth = selectedBuilding.gridWidth;  // Largeur du bâtiment en unités de grille
+                int buildingLength = selectedBuilding.gridLength; // Longueur du bâtiment en unités de grille
+                
+                // Ajuster la position pour centrer le bâtiment sur la grille
+                float snappedX = Mathf.Round(targetPosition.x / gridSize) * gridSize;
+                float snappedZ = Mathf.Round(targetPosition.z / gridSize) * gridSize;
+
+                // Décaler la position pour aligner correctement les bâtiments de taille variable
+                snappedX += ((buildingWidth % 2) == 0) ? gridSize / 2f : 0;
+                snappedZ += ((buildingLength % 2) == 0) ? gridSize / 2f : 0;
+
+                targetPosition = new Vector3(snappedX, targetPosition.y, snappedZ);
+            }
+
+            previewInstance.transform.position = targetPosition;
             previewInstance.transform.rotation = Quaternion.Euler(0, rotationY, 0);
 
             overlappingObjects.Clear();
@@ -92,16 +126,32 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+
     void HandleRotation()
     {
-        if (Input.GetKey(KeyCode.R) && !Input.GetKey(KeyCode.LeftShift))
-        {
-            rotationY += 100f * Time.deltaTime;
+        if (snapRotationEnabled){
+            if (Input.GetKeyDown(KeyCode.R) && !Input.GetKey(KeyCode.LeftShift))
+            {
+                targetRotationY = Mathf.Round((targetRotationY + snapAngle) / snapAngle) * snapAngle;
+            }
+            else if (Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftShift))
+            {
+                targetRotationY = Mathf.Round((targetRotationY - snapAngle) / snapAngle) * snapAngle;
+            }
         }
-        else if (Input.GetKey(KeyCode.R) && Input.GetKey(KeyCode.LeftShift))
-        {
-            rotationY += -100f * Time.deltaTime;
+        else{
+            if (Input.GetKey(KeyCode.R) && !Input.GetKey(KeyCode.LeftShift))
+            {
+                targetRotationY += 100f * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.R) && Input.GetKey(KeyCode.LeftShift))
+            {
+                targetRotationY += -100f * Time.deltaTime;
+            }
         }
+
+        rotationY = Mathf.MoveTowardsAngle(rotationY, targetRotationY, rotationSpeed * Time.deltaTime);
+
     }
 
     void HandlePlacement()
@@ -135,4 +185,15 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
     }
+
+    //-----------------------------------------------------Active/Desactive des systèmes ---
+    public void ToggleSnapRotation()
+    {
+        snapRotationEnabled = !snapRotationEnabled;
+        if (snapRotationEnabled)
+        {
+            targetRotationY = Mathf.Round(targetRotationY / snapAngle) * snapAngle;
+        }
+    }
+
 }
