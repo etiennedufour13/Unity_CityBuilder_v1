@@ -24,7 +24,14 @@ public class BuildingPlacer : MonoBehaviour
     public bool gridPlacementEnabled;
     int buildingWidth, buildingLength; // utilisé pour la grille
     public float gridSize = 1f; //taille de la grille
+    private GridVisualizer gridVisualizer;
 
+
+
+    void Start()
+    {
+        gridVisualizer = FindObjectOfType<GridVisualizer>();
+    }
 
     void Update()
     {
@@ -86,19 +93,19 @@ public class BuildingPlacer : MonoBehaviour
 
             if (gridPlacementEnabled)
             {
-                float gridSize = 1f; // Taille de la grille, à ajuster selon ton jeu
-                int buildingWidth = selectedBuilding.gridWidth;  // Largeur du bâtiment en unités de grille
-                int buildingLength = selectedBuilding.gridLength; // Longueur du bâtiment en unités de grille
-                
-                // Ajuster la position pour centrer le bâtiment sur la grille
-                float snappedX = Mathf.Round(targetPosition.x / gridSize) * gridSize;
-                float snappedZ = Mathf.Round(targetPosition.z / gridSize) * gridSize;
+                Quaternion rotation = Quaternion.Euler(0, targetRotationY, 0);
+                Vector3 localPosition = Quaternion.Inverse(rotation) * targetPosition;
 
-                // Décaler la position pour aligner correctement les bâtiments de taille variable
+                float snappedX = Mathf.Round(localPosition.x / gridSize) * gridSize;
+                float snappedZ = Mathf.Round(localPosition.z / gridSize) * gridSize;
+
                 snappedX += ((buildingWidth % 2) == 0) ? gridSize / 2f : 0;
                 snappedZ += ((buildingLength % 2) == 0) ? gridSize / 2f : 0;
 
-                targetPosition = new Vector3(snappedX, targetPosition.y, snappedZ);
+                targetPosition = rotation * new Vector3(snappedX, localPosition.y, snappedZ);
+
+                gridVisualizer.DrawGrid(targetPosition, gridSize, targetRotationY);
+
             }
 
             previewInstance.transform.position = targetPosition;
@@ -125,6 +132,7 @@ public class BuildingPlacer : MonoBehaviour
             if (materialController != null) materialController.SetCollisionState(!isValidPlacement);
         }
     }
+
 
 
     void HandleRotation()
@@ -161,11 +169,13 @@ public class BuildingPlacer : MonoBehaviour
             Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
             Destroy(previewInstance);
             previewInstance = null;
+            gridVisualizer.ClearGrid();
         }
         else if (Input.GetMouseButtonDown(1))
         {
             Destroy(previewInstance);
             previewInstance = null;
+            gridVisualizer.ClearGrid();
         }
     }
 

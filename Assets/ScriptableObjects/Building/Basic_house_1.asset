@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8009727030219251683, guid: c929842a8001d1e4386b96059693fd8d, type: 3}
   buildingName: House
-  gridWidth: 1
-  gridLength: 2
+  gridWidth: 2
+  gridLength: 4

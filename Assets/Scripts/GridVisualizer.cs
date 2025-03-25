@@ -1,58 +1,59 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GridVisualizer : MonoBehaviour
 {
-    public float gridSize = 1f;
-    public int gridWidth = 10;
-    public int gridHeight = 10;
     public Material gridMaterial;
+    public int gridRange = 5; // Distance autour du bâtiment
+    public float fadeDistance = 5f; // Distance sur laquelle la grille s'estompe
 
-    private MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
+    private List<GameObject> gridLines = new List<GameObject>();
 
-    void Start()
+    public void DrawGrid(Vector3 center, float gridSize, float rotationY)
     {
-        meshFilter = gameObject.AddComponent<MeshFilter>();
-        meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = gridMaterial;
+        ClearGrid();
+        Quaternion rotation = Quaternion.Euler(0, rotationY, 0);
 
-        GenerateGrid();
-    }
-
-    void GenerateGrid()
-    {
-        Mesh mesh = new Mesh();
-        Vector3[] vertices = new Vector3[(gridWidth + 1) * (gridHeight + 1)];
-        int[] indices = new int[gridWidth * (gridHeight + 1) * 2 + gridHeight * (gridWidth + 1) * 2];
-
-        int v = 0, i = 0;
-        for (int x = 0; x <= gridWidth; x++)
+        for (int x = -gridRange; x <= gridRange; x++)
         {
-            for (int z = 0; z <= gridHeight; z++)
+            for (int z = -gridRange; z <= gridRange; z++)
             {
-                vertices[v++] = new Vector3((x - gridWidth / 2f) * gridSize, 0, (z - gridHeight / 2f) * gridSize);
+                Vector3 localStart = new Vector3(x * gridSize, 0, -gridRange * gridSize);
+                Vector3 localEnd = new Vector3(x * gridSize, 0, gridRange * gridSize);
+                CreateGridLine(rotation * localStart + center, rotation * localEnd + center, center);
+
+                localStart = new Vector3(-gridRange * gridSize, 0, z * gridSize);
+                localEnd = new Vector3(gridRange * gridSize, 0, z * gridSize);
+                CreateGridLine(rotation * localStart + center, rotation * localEnd + center, center);
             }
         }
+    }
 
-        v = 0;
-        for (int x = 0; x <= gridWidth; x++)
+    private void CreateGridLine(Vector3 start, Vector3 end, Vector3 center)
+    {
+        GameObject line = new GameObject("GridLine");
+        LineRenderer lr = line.AddComponent<LineRenderer>();
+        lr.material = gridMaterial;
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.positionCount = 2;
+        lr.SetPositions(new Vector3[] { start, end });
+
+        float distance = Vector3.Distance((start + end) / 2, center);
+        float alpha = Mathf.Clamp01(1 - (distance / fadeDistance));
+        Color lineColor = new Color(1f, 1f, 1f, alpha);
+        lr.startColor = lineColor;
+        lr.endColor = lineColor;
+
+        gridLines.Add(line);
+    }
+
+    public void ClearGrid()
+    {
+        foreach (var line in gridLines)
         {
-            indices[i++] = v;
-            indices[i++] = v + gridHeight;
-            v += (gridHeight + 1);
+            Destroy(line);
         }
-
-        v = 0;
-        for (int z = 0; z <= gridHeight; z++)
-        {
-            indices[i++] = v;
-            indices[i++] = v + gridWidth * (gridHeight + 1);
-            v++;
-        }
-
-        mesh.vertices = vertices;
-        mesh.SetIndices(indices, MeshTopology.Lines, 0);
-        meshFilter.mesh = mesh;
+        gridLines.Clear();
     }
 }
-
