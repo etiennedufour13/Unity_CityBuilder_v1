@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -22,6 +23,7 @@ public class BuildingPlacer : MonoBehaviour
     float targetRotationY; // pour stocket la rotation de manière temporaire
 
     public bool gridPlacementEnabled;
+    private bool waitForRotation; //bool qui stock que l'ont veut une grid mais pas le temps de la rotation (sinon c'est dégeu) 
     int buildingWidth, buildingLength; // utilisé pour la grille
     public float gridSize = 1f; //taille de la grille
     private GridVisualizer gridVisualizer;
@@ -102,7 +104,8 @@ public class BuildingPlacer : MonoBehaviour
                 snappedX += ((buildingWidth % 2) == 0) ? gridSize / 2f : 0;
                 snappedZ += ((buildingLength % 2) == 0) ? gridSize / 2f : 0;
 
-                targetPosition = rotation * new Vector3(snappedX, localPosition.y, snappedZ);
+                if (!waitForRotation)
+                    targetPosition = rotation * new Vector3(snappedX, localPosition.y, snappedZ);
 
                 gridVisualizer.DrawGrid(targetPosition, gridSize, targetRotationY);
 
@@ -137,6 +140,7 @@ public class BuildingPlacer : MonoBehaviour
 
     void HandleRotation()
     {
+        //gestion des inputs
         if (snapRotationEnabled){
             if (Input.GetKeyDown(KeyCode.R) && !Input.GetKey(KeyCode.LeftShift))
             {
@@ -158,24 +162,45 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
 
+        //application de la rotation
         rotationY = Mathf.MoveTowardsAngle(rotationY, targetRotationY, rotationSpeed * Time.deltaTime);
+
+        //désactive le crantage en cas de retard de rotation
+        if (snapRotationEnabled){
+            if (targetRotationY != rotationY){
+                waitForRotation = true;
+            }
+            else {
+                waitForRotation = false;
+            }
+        }
+        else{
+            if (Input.GetKey(KeyCode.R)){
+                waitForRotation = true;
+            }
+            else {
+                waitForRotation = false;
+            }
+        }
 
     }
 
     void HandlePlacement()
     {
-        if (Input.GetMouseButtonDown(0) && isValidPlacement)
-        {
-            Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
-            Destroy(previewInstance);
-            previewInstance = null;
-            gridVisualizer.ClearGrid();
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            Destroy(previewInstance);
-            previewInstance = null;
-            gridVisualizer.ClearGrid();
+        if (!EventSystem.current.IsPointerOverGameObject()){
+            if (Input.GetMouseButtonDown(0) && isValidPlacement)
+            {
+                Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
+                Destroy(previewInstance);
+                previewInstance = null;
+                gridVisualizer.ClearGrid();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                Destroy(previewInstance);
+                previewInstance = null;
+                gridVisualizer.ClearGrid();
+            }
         }
     }
 
@@ -204,6 +229,12 @@ public class BuildingPlacer : MonoBehaviour
         {
             targetRotationY = Mathf.Round(targetRotationY / snapAngle) * snapAngle;
         }
+    }
+
+    public void ToggleGrid(){
+        gridPlacementEnabled = !gridPlacementEnabled;
+        if (!gridPlacementEnabled)
+            gridVisualizer.ClearGrid();
     }
 
 }

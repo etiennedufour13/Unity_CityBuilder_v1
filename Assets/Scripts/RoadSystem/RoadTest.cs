@@ -22,12 +22,12 @@ public class RoadTest : MonoBehaviour
         splineContainer = GetComponent<SplineContainer>();
     }
 
-    //gère les inputs et les voids actives
+    //gï¿½re les inputs et les voids actives
     void Update()
     {
         if (!roadBuildingActive) return;
 
-        //met à jour le point actif si il y en a un
+        //met ï¿½ jour le point actif si il y en a un
         if (roadPoints.Count > 0)
         {
             UpdateActivePoint();
@@ -52,7 +52,7 @@ public class RoadTest : MonoBehaviour
         }
     }
 
-    //appelé par les UI, active/desactive la construction
+    //appelï¿½ par les UI, active/desactive la construction
     public void ToggleRoadBuilding()
     {
         roadBuildingActive = !roadBuildingActive;
@@ -61,7 +61,7 @@ public class RoadTest : MonoBehaviour
 
 
     //-------------------------------------------------------------- CREATION POINT ---
-    //Créé un point
+    //Crï¿½ï¿½ un point
     private void CreateRoadPoint()
     {
         Vector3 position = GetMouseWorldPosition();
@@ -72,7 +72,7 @@ public class RoadTest : MonoBehaviour
         CreatePoint(position);
     }
 
-    //Définit la position du point
+    //Dï¿½finit la position du point
     private void CreatePoint(Vector3 position)
     {
         GameObject newPoint = Instantiate(roadPointPrefab, new Vector3(position.x, position.y + 0.01f, position.z), Quaternion.identity, transform);
@@ -80,7 +80,7 @@ public class RoadTest : MonoBehaviour
         CreateSpine();
     }
 
-    //ajoute des nouveaux roadPoints à la spine
+    //ajoute des nouveaux roadPoints ï¿½ la spine
     private void CreateSpine()
     {
         if (roadPoints.Count < 2) return; //ne fait rien pour le point d'origine
@@ -90,7 +90,7 @@ public class RoadTest : MonoBehaviour
 
         if (roadPoints.Count == 2)
         {
-            //simple création des points de la spline (sans s'occuper des béziers)
+            //simple crï¿½ation des points de la spline (sans s'occuper des bï¿½ziers)
             Vector3 pos0 = roadPoints[0].transform.position;
             Vector3 pos1 = GetMouseWorldPosition();
             spline.Add(new BezierKnot(pos0, pos0, pos0));
@@ -118,27 +118,27 @@ public class RoadTest : MonoBehaviour
             Vector3 pos0 = roadPoints[0].transform.position;
             Vector3 pos1 = GetMouseWorldPosition();
 
-            //définition des roadPoints (pas besoin pour l'initial qui bouge pas)
+            //dï¿½finition des roadPoints (pas besoin pour l'initial qui bouge pas)
             roadPoints[1].transform.position = pos1;
 
-            //définition des splineKnots
-            if (spline.Knots.Count() < 2) return; //vérification qu'ils sont bien créés
+            //dï¿½finition des splineKnots
+            if (spline.Knots.Count() < 2) return; //vï¿½rification qu'ils sont bien crï¿½ï¿½s
             spline.Clear();
             spline.Add(new BezierKnot(pos0, pos0, (pos1 - pos0).normalized * tension));
             spline.Add(new BezierKnot(pos1, (pos0 - pos1).normalized * tension, (pos1 - pos0).normalized * tension));
 
         }
+        // quand il y a plus que 2 points
         else
         {
-            Debug.Log("3");
             //variables
             Vector3 newPos = GetNextRoadPos();
 
-            //définition du roadPoint
+            //dï¿½finition du roadPoint
             roadPoints[roadPoints.Count -1].transform.position = newPos;
 
-            //définition des splineKnots
-            if (spline.Knots.Count() < 3) return; //vérification qu'ils sont bien créés
+            //dï¿½finition des splineKnots
+            if (spline.Knots.Count() < 3) return; //vï¿½rification qu'ils sont bien crï¿½ï¿½s
 
             //variables
             BezierKnot lastKnot = spline[spline.Count - 2];
@@ -225,12 +225,30 @@ public class RoadTest : MonoBehaviour
             GameObject secondPreviousPoint = roadPoints[roadPoints.Count - 3];
             if (!IsAngleValid(secondPreviousPoint.transform.position, previousPoint.transform.position, newPos))
             {
-
+                newPos = GetLimitedPosition(roadPoints[roadPoints.Count -1].transform.position, roadPoints[roadPoints.Count -2].transform.position, newPos);
             }
         }
 
         return newPos;
     }
+
+    private Vector3 GetLimitedPosition(Vector3 p1, Vector3 p2, Vector3 newPos)
+    {
+        Vector3 dir1 = (p2 - p1).normalized;
+        Vector3 dir2 = (newPos - p2).normalized;
+        float angle = Vector3.Angle(dir1, dir2);
+
+        if (angle <= maxAngle) return newPos; // Position valide
+
+        // Trouver la direction ajustÃ©e avec un angle maximal
+        float sign = Mathf.Sign(Vector3.SignedAngle(dir1, dir2, Vector3.up)); // Sens de rotation
+        Quaternion rotation = Quaternion.AngleAxis(maxAngle * sign, Vector3.up);
+        Vector3 correctedDir = rotation * dir1; // Appliquer la rotation
+        Vector3 correctedPos = p2 + correctedDir * pointDistance; // Nouvelle position sur l'arc
+
+        return correctedPos;
+    }
+
 
     private bool IsAngleValid(Vector3 p1, Vector3 p2, Vector3 p3)
     {

@@ -44,7 +44,7 @@ public class VegetationSpawner : MonoBehaviour
         float spawnChance = Mathf.InverseLerp(vegetation.minThreshold, vegetation.maxThreshold, noiseValue);
         if (Random.value > spawnChance) return;
 
-        Vector3 pos = new Vector3(x * patchSize, 0, z * patchSize) + new Vector3(
+        Vector3 pos = new Vector3((x - gridSize / 2) * patchSize, 0, (z - gridSize / 2) * patchSize) + new Vector3(
             Random.Range(-randomOffsetFactor, randomOffsetFactor),
             0,
             Random.Range(-randomOffsetFactor, randomOffsetFactor)
