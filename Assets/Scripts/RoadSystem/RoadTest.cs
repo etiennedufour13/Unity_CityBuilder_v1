@@ -187,16 +187,6 @@ public class RoadTest : MonoBehaviour
 
 
     //-------------------------------------------------------------- GESTION ---
-    //position du Raycast et du raycast contraint
-    private Vector3 GetMouseWorldPosition()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            return hit.point;
-        }
-        return Vector3.zero;
-    }
 
     private Vector3 GetNextRoadPos()
     {
@@ -207,54 +197,59 @@ public class RoadTest : MonoBehaviour
 
         Vector3 newPos;
 
-        if (rigidMode && roadPoints.Count > 2)
-        {
-            GameObject secondPreviousPoint = roadPoints[roadPoints.Count - 3];
-            Vector3 direction = (previousPoint.transform.position - secondPreviousPoint.transform.position).normalized;
-            newPos = previousPoint.transform.position + direction * pointDistance;
-        }
-        else
-        {
-            Vector3 mousePos = GetMouseWorldPosition();
-            Vector3 direction = (mousePos - previousPoint.transform.position).normalized;
-            newPos = previousPoint.transform.position + direction * pointDistance;
-        }
-
-        if (roadPoints.Count > 2)
-        {
-            GameObject secondPreviousPoint = roadPoints[roadPoints.Count - 3];
-            if (!IsAngleValid(secondPreviousPoint.transform.position, previousPoint.transform.position, newPos))
-            {
-                newPos = GetLimitedPosition(roadPoints[roadPoints.Count -1].transform.position, roadPoints[roadPoints.Count -2].transform.position, newPos);
-            }
-        }
+        Vector3 mousePos = GetMouseWorldPosition();
+        Vector3 direction = (mousePos - previousPoint.transform.position).normalized;
+        newPos = previousPoint.transform.position + direction * pointDistance;
 
         return newPos;
     }
 
-    private Vector3 GetLimitedPosition(Vector3 p1, Vector3 p2, Vector3 newPos)
+    //position du Raycast et du raycast contraint
+    private Vector3 GetMouseWorldPosition()
     {
-        Vector3 dir1 = (p2 - p1).normalized;
-        Vector3 dir2 = (newPos - p2).normalized;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Vector3 pos;
+            if (roadPoints.Count > 2 && rigidMode)
+                pos = GetValidPosition(roadPoints[roadPoints.Count -3].transform.position, 
+                                        roadPoints[roadPoints.Count -2].transform.position, hit.point, 0);
+            else if (roadPoints.Count > 2)
+                pos = GetValidPosition(roadPoints[roadPoints.Count -3].transform.position, 
+                                        roadPoints[roadPoints.Count -2].transform.position, hit.point, maxAngle);
+            else
+                pos = hit.point;
+
+            return pos;
+        }
+        return Vector3.zero;
+    }
+
+    private Vector3 GetValidPosition(Vector3 p1, Vector3 p2, Vector3 p3, float maxAngleDefined)
+    {
+        Spline spline = splineContainer.Splines[0];
+        BezierKnot lastKnot = spline[spline.Count - 2];
+        Vector3 lastKnotGlobalTan = splineContainer.transform.TransformDirection(lastKnot.TangentIn);
+        lastKnotGlobalTan = p2 + lastKnotGlobalTan;
+
+        //Debug.Log(lastKnotGlobalTan);
+
+
+
+        Vector3 dir1 = (p2 - lastKnotGlobalTan).normalized;
+        Vector3 dir2 = (p3 - p2).normalized;
         float angle = Vector3.Angle(dir1, dir2);
 
-        if (angle <= maxAngle) return newPos; // Position valide
+        // Si l'angle est valide, on retourne la position d'origine
+        if (angle <= maxAngleDefined) return p3;
 
-        // Trouver la direction ajustée avec un angle maximal
-        float sign = Mathf.Sign(Vector3.SignedAngle(dir1, dir2, Vector3.up)); // Sens de rotation
-        Quaternion rotation = Quaternion.AngleAxis(maxAngle * sign, Vector3.up);
-        Vector3 correctedDir = rotation * dir1; // Appliquer la rotation
-        Vector3 correctedPos = p2 + correctedDir * pointDistance; // Nouvelle position sur l'arc
+        // Sinon, on ajuste p3 en le projetant sur l'arc défini par maxAngle autour de p2
+        Quaternion rotation = Quaternion.AngleAxis(maxAngleDefined * Mathf.Sign(Vector3.SignedAngle(dir1, dir2, Vector3.up)), Vector3.up);
+        Vector3 correctedDir = rotation * dir1;
+        Vector3 correctedPos = p2 + correctedDir * (p3 - p2).magnitude; // Garde la même distance
+        correctedPos = new Vector3(correctedPos.x, p3.y, correctedPos.z);
 
         return correctedPos;
     }
 
-
-    private bool IsAngleValid(Vector3 p1, Vector3 p2, Vector3 p3)
-    {
-        Vector3 dir1 = (p2 - p1).normalized;
-        Vector3 dir2 = (p3 - p2).normalized;
-        float angle = Vector3.Angle(dir1, dir2);
-        return angle <= maxAngle;
-    }
 }
