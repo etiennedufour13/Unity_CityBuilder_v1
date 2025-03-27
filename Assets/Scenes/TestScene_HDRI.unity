@@ -604,6 +604,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362827688}
   m_CullTransparentMesh: 1
+--- !u!1 &1897676242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897676243}
+  - component: {fileID: 1897676244}
+  m_Layer: 0
+  m_Name: VegetationSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1897676243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897676242}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6183108427185746879}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1897676244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897676242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d97f022965aeda45ad1a81ec4f3226b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grass:
+    prefab: {fileID: 7009068982599251969, guid: 1bcb93906547bf54894bb2cec17702ac, type: 3}
+    minThreshold: 0.4
+    maxThreshold: 1.5
+  tree:
+    prefab: {fileID: 2594893917632164131, guid: aa50837e47c8c034ca2617b456ca71b2, type: 3}
+    minThreshold: 0.8
+    maxThreshold: 3.5
+  gridSize: 300
+  noiseScale: 0.04
+  patchSize: 0.4
+  randomOffsetFactor: 0.2
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1
@@ -3433,7 +3489,7 @@ Light:
       e32: 0
       e33: 1
     m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
+  m_Cookie: {fileID: 8600000, guid: 118bd758bfdb9f8479f03de2655fdf58, type: 2}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
   m_RenderMode: 0
@@ -3443,7 +3499,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 0.5, y: 0.5}
+  m_AreaSize: {x: 400, y: 400}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
@@ -3772,7 +3828,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 32c3561e4ff9fed46bf08c982d744084, type: 2}
+  - {fileID: 2100000, guid: f51349fdd010a79438eda1c0155e067c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3956,10 +4012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066148862b4c2584aa134dc3938b6953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: 500
+  zoomSpeed: 200
   rotationSpeed: 5
   minZoom: 5
-  maxZoom: 100
+  maxZoom: 35
   rotationCoef: 1
   zoomCoef: 1
   groundLayer:
@@ -5548,6 +5604,7 @@ Transform:
   - {fileID: 1106477652052985502}
   - {fileID: 1362503243361236605}
   - {fileID: 516864452}
+  - {fileID: 1897676243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6190582853494222327
@@ -7481,8 +7538,8 @@ MonoBehaviour:
   m_AffectDiffuse: 1
   m_AffectSpecular: 1
   m_NonLightmappedOnly: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_ShapeWidth: 400
+  m_ShapeHeight: 400
   m_AspectRatio: 1
   m_ShapeRadius: 0.025
   m_SoftnessScale: 1

@@ -22,6 +22,40 @@ MonoBehaviour:
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: -0.17278622}
+--- !u!114 &-8941239731483040783
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b24b200358312b4fa1004e2431c2f1f, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.10799135}
+  midtones:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-7817095234578245877
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -295,6 +329,7 @@ MonoBehaviour:
   - {fileID: -9132564269482512227}
   - {fileID: 4226225693742259339}
   - {fileID: 7063577780781741821}
+  - {fileID: -8941239731483040783}
 --- !u!114 &3364463547743187413
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -322,13 +357,13 @@ MonoBehaviour:
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 1
-    m_Value: 2.542964
+    m_Value: 1.0434415
   upperHemisphereLuxColor:
     m_OverrideState: 1
-    m_Value: {x: 0.29713935, y: 0.37381157, z: 0.5}
+    m_Value: {x: 0.053838298, y: 0.24696366, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 1
-    m_Value: 10000
+    m_Value: 28000
   updateMode:
     m_OverrideState: 0
     m_Value: 0
@@ -340,7 +375,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: ed3572f397ce08445909647039c7767a, type: 3}
+    m_Value: {fileID: 8900000, guid: 5dd1dab73acb80a4ca4a200b35ea95e2, type: 3}
   distortionMode:
     m_OverrideState: 0
     m_Value: 0
@@ -507,10 +542,10 @@ MonoBehaviour:
     m_Value: 0
   limitMin:
     m_OverrideState: 0
-    m_Value: -1
+    m_Value: 9.143545
   limitMax:
-    m_OverrideState: 0
-    m_Value: 14
+    m_OverrideState: 1
+    m_Value: 14.2
   curveMap:
     m_OverrideState: 0
     m_Value:
