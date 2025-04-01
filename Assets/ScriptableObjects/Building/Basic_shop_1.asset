@@ -16,3 +16,8 @@ MonoBehaviour:
   buildingName: Shop
   gridWidth: 3
   gridLength: 3
+  facteurNumber: 000000000100000002000000
+  facteurEffect:
+  - 10
+  - 10
+  - -10

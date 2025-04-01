@@ -302,6 +302,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 476a406bce7f2b441b81eb72b505a4f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facteurNumber: 000000000100000002000000
+  facteurEffect:
+  - 10
+  - -20
+  - -10
 --- !u!65 &7964486824537340530
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -192,6 +192,11 @@ public class BuildingPlacer : MonoBehaviour
             {
                 Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
                 Destroy(previewInstance);
+
+                //effet de placement
+                BuildingData data = selectedBuilding.prefab.GetComponent<BuildingData>();
+                selectedBuilding.prefab.GetComponent<Building>().ApplyEffect(data.facteurNumber, data.facteurEffect);
+
                 previewInstance = null;
                 gridVisualizer.ClearGrid();
             }

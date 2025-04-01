@@ -2,6 +2,16 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    //--------------------------------------- effet immédiat de placement ---
+    public void ApplyEffect(int[] facteurNumber, float[] facteurEffect)
+    {
+        for (int i = 0; i < facteurNumber.Length; i++)
+        {
+            CityFactors.Instance.ModifyFactor(facteurNumber[i], facteurEffect[i]);
+        }
+    }
+
+    //--------------------------------------- système de placement ---
     public bool IsValidPlacement()
     {
         return !CheckOverlap();

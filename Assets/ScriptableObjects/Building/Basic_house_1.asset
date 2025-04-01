@@ -16,3 +16,8 @@ MonoBehaviour:
   buildingName: House
   gridWidth: 2
   gridLength: 4
+  facteurNumber: 000000000100000002000000
+  facteurEffect:
+  - 10
+  - 10
+  - -10
