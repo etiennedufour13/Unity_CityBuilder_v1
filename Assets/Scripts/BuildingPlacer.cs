@@ -190,12 +190,12 @@ public class BuildingPlacer : MonoBehaviour
         if (!EventSystem.current.IsPointerOverGameObject()){
             if (Input.GetMouseButtonDown(0) && isValidPlacement)
             {
-                Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
+                GameObject instance = Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
                 Destroy(previewInstance);
 
                 //effet de placement
-                BuildingData data = selectedBuilding.prefab.GetComponent<BuildingData>();
-                selectedBuilding.prefab.GetComponent<Building>().ApplyEffect(data.facteurNumber, data.facteurEffect);
+                BuildingData data = selectedBuilding;
+                instance.GetComponent<Building>().ApplyEffect(data.facteurNumber, data.facteurEffect);
 
                 previewInstance = null;
                 gridVisualizer.ClearGrid();
