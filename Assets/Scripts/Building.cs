@@ -2,12 +2,20 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+
+
     //--------------------------------------- effet immédiat de placement ---
     public void ApplyEffect(int[] facteurNumber, float[] facteurEffect)
     {
         for (int i = 0; i < facteurNumber.Length; i++)
         {
+            //modification des facteurs de la ville
             CityFactors.Instance.ModifyFactor(facteurNumber[i], facteurEffect[i]);
+
+            //icone visuelle de factor
+            Collider col = GetComponent<Collider>();
+            Vector3 spawnPosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0);
+            Instantiate(PrefabManager.Instance.ecoIcon, spawnPosition, Quaternion.identity);
         }
     }
 
