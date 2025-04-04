@@ -196,6 +196,7 @@ public class BuildingPlacer : MonoBehaviour
                 //effet de placement
                 BuildingData data = selectedBuilding;
                 instance.GetComponent<Building>().ApplyEffect(data.facteurNumber, data.facteurEffect);
+                instance.GetComponent<Building>().PlacementEffects();
 
                 previewInstance = null;
                 gridVisualizer.ClearGrid();

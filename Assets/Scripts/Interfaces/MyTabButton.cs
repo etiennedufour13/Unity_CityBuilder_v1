@@ -11,10 +11,26 @@ public class MyTabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHan
 
     public Image background;
 
+    public bool isOpen = false;
 
+    private Vector2 initialPos;
+    public float vertOffset, horOffset;
+    public Vector2 normalScale, selectedScale;
+    
+
+    //----------------------------------------- Setup ---
+        void Start()
+    {
+        background = GetComponent<Image>();
+        tabGroup.Subscribe(this);
+        initialPos = transform.localPosition;
+    }
+
+    //----------------------------------------- Souris events ---
     public void OnPointerClick(PointerEventData eventData)
     {
-        tabGroup.OnTabSelected(this);
+        isOpen = !isOpen;
+        tabGroup.OnTabSelected(this, isOpen);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -25,16 +41,17 @@ public class MyTabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHan
         tabGroup.OnTabExit(this);
     }
 
+    //----------------------------------------- Animations ---
+    public void ChangePos(bool isUp, int horizontalOffset){
+        if (isUp){
+            transform.LeanMoveLocal(new Vector2(initialPos.x + horizontalOffset*horOffset, initialPos.y + vertOffset), 0.5f).setEaseOutQuad();
+            transform.LeanScale(selectedScale, 0.5f).setEaseOutQuad();
 
-    void Start()
-    {
-        background = GetComponent<Image>();
-        tabGroup.Subscribe(this);
+        }
+        else{
+            transform.LeanMoveLocal(new Vector2(initialPos.x + horizontalOffset*horOffset, initialPos.y), 0.5f).setEaseOutQuad();
+            transform.LeanScale(normalScale, 0.5f).setEaseOutQuad();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

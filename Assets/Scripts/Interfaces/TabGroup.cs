@@ -13,16 +13,13 @@ public class TabGroup : MonoBehaviour
     public List<GameObject> objectsToSwap;
 
 
+    //ajout des tabs enfants
     public void Subscribe(MyTabButton button)
     {
-        if (tabButtons == null)
-        {
-            tabButtons = new List<MyTabButton>();
-        }
-
-        tabButtons.Add(button);
+        //ajout manuel au final
     }
 
+    //la souris passe au dessus
     public void OnTabEnter(MyTabButton button)
     {
         ResetTabs();
@@ -31,29 +28,60 @@ public class TabGroup : MonoBehaviour
         }
     }
 
+    //la souris n'est plus au dessus
     public void OnTabExit(MyTabButton button)
     {
         ResetTabs();
     }
 
-    public void OnTabSelected(MyTabButton button)
+    //clic du bouton
+    public void OnTabSelected(MyTabButton button, bool isActive)
     {
         selectedTab = button;
-        ResetTabs();
-        button.background.sprite = tabActive;
-        int index = button.transform.GetSiblingIndex();
-        for (int i = 0; i < objectsToSwap.Count; i++) { 
-            if (i == index)
-            {
-                objectsToSwap[i].SetActive(true);
+        ResetTabs(); // passe les visuels à neutre
+        int index = button.transform.GetSiblingIndex(); //trouve l'index du bouton
+
+        if (isActive){
+            button.background.sprite = tabActive;
+            for (int i = 0; i < objectsToSwap.Count; i++) { 
+                if (i == index)
+                {
+                    objectsToSwap[i].GetComponent<PanelAnimation>().Open();
+                }
+                else
+                {
+                    objectsToSwap[i].GetComponent<PanelAnimation>().Close();                   
+                }
             }
+
+        }
+        else {
+            objectsToSwap[index].GetComponent<PanelAnimation>().Close();   
+        }
+
+
+        //lance les animations
+        int selectedIndex = tabButtons.IndexOf(button);
+
+        foreach (MyTabButton tabButton in tabButtons) //desactive les autres
+        {
+            //actif
+            if (tabButton == button)
+                tabButton.ChangePos(isActive, 0);
             else
             {
-                objectsToSwap[i].SetActive(false );
+                tabButton.isOpen = false;
+
+                int direction = 0;
+                if (isActive)
+                    direction = (tabButtons.IndexOf(tabButton) < selectedIndex) ? -1 : 1;
+
+                tabButton.ChangePos(false, direction);
             }
         }
     }
 
+    //passe les visuels à neutres
     public void ResetTabs()
     {
         foreach (MyTabButton button in tabButtons) {

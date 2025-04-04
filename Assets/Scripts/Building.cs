@@ -3,8 +3,7 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
 
-
-    //--------------------------------------- effet immédiat de placement ---
+    //--------------------------------------- effet immï¿½diat de placement sur les facteurs---
     public void ApplyEffect(int[] facteurNumber, float[] facteurEffect)
     {
         for (int i = 0; i < facteurNumber.Length; i++)
@@ -19,7 +18,21 @@ public class Building : MonoBehaviour
         }
     }
 
-    //--------------------------------------- système de placement ---
+    //--------------------------------------- effet visuel de placement ---
+    public void PlacementEffects()
+    {
+        Vector3 normalScale = transform.localScale;
+        Vector3 normalPosition = transform.localPosition;
+
+        transform.localScale = new Vector3(normalScale.x, normalScale.y * 1.2f, normalScale.z);
+        transform.localPosition = new Vector3(normalPosition.x, normalPosition.y + 2f, normalPosition.z);
+
+        transform.LeanMoveLocal(normalPosition, 0.2f).setEaseOutQuad();
+        transform.LeanScale(normalScale, 0.2f).setEaseOutQuad();
+    }
+
+
+    //--------------------------------------- systï¿½me de placement ---
     public bool IsValidPlacement()
     {
         return !CheckOverlap();
@@ -33,7 +46,7 @@ public class Building : MonoBehaviour
         Collider[] colliders = Physics.OverlapBox(collider.bounds.center, collider.bounds.extents, transform.rotation);
         foreach (Collider col in colliders)
         {
-            if (col.gameObject != gameObject) // Ignore soi-même
+            if (col.gameObject != gameObject) // Ignore soi-mï¿½me
             {
                 return true;
             }
