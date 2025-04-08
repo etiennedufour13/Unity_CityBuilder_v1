@@ -13,17 +13,33 @@ public class Building : MonoBehaviour
             CityFactors.Instance.ModifyFactor(facteurNumber[i], facteurEffect[i]);
 
             //icone visuelle de factor
-            if (facteurEffect[i] != 0) {
+            if (facteurEffect[i] != 0 && (facteurNumber[i] <= 2)) {
                 Collider col = GetComponent<Collider>();
-                Vector3 spawnPosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0) + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+
+                Vector3 basePosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0);
+
+                // Calcul direction perpendiculaire droite par rapport à la caméra
+                Vector3 camForward = Camera.main.transform.forward;
+                Vector3 camRight = new Vector3(camForward.z, 0, -camForward.x).normalized;
+
+                // Application de l’offset selon facteurNumber[i]
+                float offsetDistance = 1.5f;
+                int offsetDir = facteurNumber[i] - 1; // -1 = gauche, 0 = neutre, 1 = droite
+                Vector3 offset = camRight * offsetDistance * offsetDir;
+
+                Vector3 spawnPosition = basePosition + offset;
+
 
                 GameObject instance = Instantiate(PrefabManager.Instance.mainFactorIcon[i], spawnPosition, Quaternion.identity);
                 Destroy(instance, 1f);
 
                 // Scale proportionnelle à la valeur absolue
+                float minScale = 0.85f;
+                float maxScale = 1.15f;
                 float valueAbs = Mathf.Abs(facteurEffect[i]);
-                float scale = Mathf.Clamp(0.5f + (valueAbs - 1f) * (1.5f / 9f), 0.5f, 1f);
-                instance.transform.localScale = Vector3.one * scale;
+                float scale = Mathf.Clamp(minScale + (valueAbs - 1f) * ((maxScale - minScale) / 9f), minScale, maxScale);
+                instance.transform.GetChild(0).localScale *= scale; //enfant1
+                instance.transform.GetChild(1).localScale *= scale; //enfant2
 
                 // Récupération du Text enfant
                 Transform textChild = instance.transform.Find("Text");
