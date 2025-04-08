@@ -18,6 +18,6 @@ MonoBehaviour:
   gridLength: 2
   facteurNumber: 000000000100000002000000
   facteurEffect:
-  - 10
-  - 10
   - -10
+  - 2
+  - 15

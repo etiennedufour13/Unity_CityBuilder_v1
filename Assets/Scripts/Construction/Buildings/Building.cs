@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Building : MonoBehaviour
 {
@@ -12,9 +13,34 @@ public class Building : MonoBehaviour
             CityFactors.Instance.ModifyFactor(facteurNumber[i], facteurEffect[i]);
 
             //icone visuelle de factor
-            Collider col = GetComponent<Collider>();
-            Vector3 spawnPosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0);
-            Instantiate(PrefabManager.Instance.ecoIcon, spawnPosition, Quaternion.identity);
+            if (facteurEffect[i] != 0) {
+                Collider col = GetComponent<Collider>();
+                Vector3 spawnPosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0) + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+
+                GameObject instance = Instantiate(PrefabManager.Instance.mainFactorIcon[i], spawnPosition, Quaternion.identity);
+                Destroy(instance, 1f);
+
+                // Scale proportionnelle à la valeur absolue
+                float valueAbs = Mathf.Abs(facteurEffect[i]);
+                float scale = Mathf.Clamp(0.5f + (valueAbs - 1f) * (1.5f / 9f), 0.5f, 1f);
+                instance.transform.localScale = Vector3.one * scale;
+
+                // Récupération du Text enfant
+                Transform textChild = instance.transform.Find("Text");
+                if (textChild != null) {
+                    // Désactivation si valeur absolue == 1
+                    textChild.gameObject.SetActive(valueAbs != 1);
+
+                    // Modification du texte
+                    if (valueAbs != 1) {
+                        TextMeshPro tmp = textChild.GetComponent<TextMeshPro>();
+                        if (tmp != null) {
+                            tmp.text = (facteurEffect[i] > 0 ? "+" : "-") + valueAbs.ToString();
+                        }
+                    }
+                }
+            }
+
         }
     }
 

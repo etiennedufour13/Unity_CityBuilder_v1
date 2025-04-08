@@ -3,7 +3,7 @@ using UnityEngine;
 public class PrefabManager : MonoBehaviour
 {
     public static PrefabManager Instance;
-    public GameObject ecoIcon;
+    public GameObject[] mainFactorIcon;
 
     void Awake()
     {
