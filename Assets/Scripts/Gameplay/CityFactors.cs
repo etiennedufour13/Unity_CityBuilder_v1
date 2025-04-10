@@ -15,6 +15,7 @@ public class CityFactors : MonoBehaviour
         public string factorName;
         public float valeurInitiale;
         public float currentValeur;
+        public float dynamique;
         public Slider slider;
         public TMPro.TextMeshProUGUI text;
     }
@@ -23,6 +24,8 @@ public class CityFactors : MonoBehaviour
 
     public CityFactor[] cityFactors;
 
+
+    // ------------------------------------------- Gestion ---
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -38,13 +41,45 @@ public class CityFactors : MonoBehaviour
         }
     }
 
-
+    // ------------------------------------------- Appels ---
     public void ModifyFactor(int factor, float valeur)
     {
         cityFactors[factor].currentValeur += valeur;
         VisualUpdateFactors(factor);
     }
 
+    public void ModifyDynamic(int factor, float valeur){
+        cityFactors[factor].dynamique += valeur;
+    }
+
+    // ------------------------------------------- Actions ---
+    public void ApplyDynamicsToFactors(){
+        for (int i = 0; i < cityFactors.Length; i++)
+        {
+            float currentDynamic = cityFactors[i].dynamique;
+            float currentValeurFactor = cityFactors[i].currentValeur;
+
+            int niveau = (int)(Mathf.Abs(currentValeurFactor) / 10);
+            if (Mathf.Abs(currentValeurFactor) <= 9) niveau = 0;
+
+            bool versExtremes = (currentValeurFactor > 9 && currentDynamic > 0) || (currentValeurFactor < -9 && currentDynamic < 0);
+
+            if (versExtremes)
+            {
+                float seuil = Mathf.Pow(2, niveau);
+                if (Mathf.Abs(currentDynamic) < seuil) return;
+
+                float modulation = (currentDynamic - seuil) / niveau;
+                ModifyFactor(i, modulation);
+            }
+            else
+            {
+                ModifyFactor(i, currentDynamic);
+            }
+        }
+    }
+
+    // ------------------------------------------- Visual ---
     private void VisualUpdateFactors(int factor)
     {
         if (cityFactors[factor].slider != null){
