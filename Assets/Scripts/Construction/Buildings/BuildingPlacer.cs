@@ -15,6 +15,7 @@ public class BuildingPlacer : MonoBehaviour
     private bool isValidPlacement = false;
     private MaterialController materialController;
     public List<string> forbiddenTags = new List<string> { "Building", "Path" };
+    public List<string> vegetauxTags = new List<string> {};
     private HashSet<GameObject> overlappingObjects = new HashSet<GameObject>();
 
     private bool snapRotationEnabled = false; //système de crantage
@@ -190,14 +191,27 @@ public class BuildingPlacer : MonoBehaviour
         if (!EventSystem.current.IsPointerOverGameObject()){
             if (Input.GetMouseButtonDown(0) && isValidPlacement)
             {
-                GameObject instance = Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);
-                Destroy(previewInstance);
+                GameObject instance = Instantiate(selectedBuilding.prefab, previewInstance.transform.position, previewInstance.transform.rotation);          
 
                 //effet de placement
                 BuildingData data = selectedBuilding;
                 instance.GetComponent<Building>().ApplyEffect(data.facteurNumber, data.facteurEffect);
                 instance.GetComponent<Building>().PlacementEffects();
 
+                //supression des végétaux
+                Collider box = previewInstance.GetComponent<Collider>();
+                Collider[] colliders = Physics.OverlapBox(box.bounds.center, box.bounds.extents, box.transform.rotation);
+
+                foreach (Collider col in colliders)
+                {
+                    if (vegetauxTags.Contains(col.tag))
+                    {
+                        Destroy(col.gameObject);
+                    }
+                }
+
+                //suppression de la preview et de la grille
+                Destroy(previewInstance);
                 previewInstance = null;
                 gridVisualizer.ClearGrid();
             }

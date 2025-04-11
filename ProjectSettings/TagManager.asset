@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Building
   - Path
+  - Tree
+  - Grass
   layers:
   - Default
   - TransparentFX
