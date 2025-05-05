@@ -8,8 +8,5 @@ public class BuildingData : ScriptableObject
 
     public int gridWidth = 1;
     public int gridLength = 1;
-
-    public int[] facteurNumber;
-    public float[] facteurEffect;
 }
 

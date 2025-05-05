@@ -8,6 +8,7 @@ public class TimeManager : MonoBehaviour
     public enum TimeSpeed { Paused, Normal, Fast, VeryFast }
 
     public float dayDuration = 5f;
+    public UnityEvent OnDayPassed;
     public UnityEvent OnWeekPassed;
 
     private float timer;
@@ -32,13 +33,13 @@ public class TimeManager : MonoBehaviour
         {
             timer = 0f;
             dayCount++;
+            OnDayPassed?.Invoke();
 
             if (dayCount > 7)
             {
                 dayCount = 1;
                 weekCount++;
                 OnWeekPassed?.Invoke();
-                Debug.Log("Nouvelle semaine commencée : semaine " + weekCount);
             }
 
             UISystem.Instance.UpdateDate(dayCount, weekCount);

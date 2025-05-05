@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static CityFactors;
-using static System.Net.Mime.MediaTypeNames;
 
 public class CityFactors : MonoBehaviour
 {
@@ -39,6 +33,10 @@ public class CityFactors : MonoBehaviour
         {
             ModifyFactor(i, cityFactors[i].valeurInitiale);
         }
+
+        //lance la void si OnWeekPass se fait
+        TimeManager.Instance.OnWeekPassed.AddListener(ApplyDynamicsToFactors);
+        TimeManager.Instance.OnDayPassed.AddListener(RedefineDyFactorsStatus);
     }
 
     // ------------------------------------------- Appels ---
@@ -48,8 +46,8 @@ public class CityFactors : MonoBehaviour
         VisualUpdateFactors(factor);
     }
 
-    public void ModifyDynamic(int factor, float valeur){
-        cityFactors[factor].dynamique += valeur;
+    public void ReplaceDyFactor(int factor, float valeur){
+        cityFactors[factor].dynamique = valeur;
     }
 
     // ------------------------------------------- Actions ---
@@ -77,6 +75,18 @@ public class CityFactors : MonoBehaviour
                 ModifyFactor(i, currentDynamic);
             }
         }
+    }
+
+    public void RedefineDyFactorsStatus()
+    {
+        //santé status
+        float currentDySante = 0f;
+        BatimentPolluant[] batimentsPolluants = FindObjectsOfType<BatimentPolluant>();
+        foreach (BatimentPolluant b in batimentsPolluants)
+        {
+            currentDySante += b.GetDySanteFactor();
+        }
+        ReplaceDyFactor(4, currentDySante);
     }
 
     // ------------------------------------------- Visual ---

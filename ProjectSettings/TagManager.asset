@@ -8,6 +8,7 @@ TagManager:
   - Path
   - Tree
   - Grass
+  - PreviewBuilding
   layers:
   - Default
   - TransparentFX

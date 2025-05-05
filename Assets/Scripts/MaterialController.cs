@@ -20,6 +20,7 @@ public class MaterialController : MonoBehaviour
 
     public void SetCollisionState(bool inCollision)
     {
-        material.color = inCollision ? Color.red : originalColor;
+        material.color = inCollision ? Color.Lerp(originalColor, Color.red, 0.3f) : originalColor;
+
     }
 }

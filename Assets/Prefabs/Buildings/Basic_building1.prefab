@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 350164624047184821}
   - component: {fileID: 1815529660487393223}
   - component: {fileID: 646038331984376552}
+  - component: {fileID: -5218291725911021782}
   m_Layer: 0
   m_Name: Basic_building1
   m_TagString: Building
@@ -409,11 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 476a406bce7f2b441b81eb72b505a4f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  facteurNumber: 000000000100000002000000
-  facteurEffect:
-  - 10
-  - 10
-  - -10
 --- !u!65 &646038331984376552
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -435,3 +431,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.4, y: 7, z: 4.3}
   m_Center: {x: 0, y: 3.5, z: 0}
+--- !u!114 &-5218291725911021782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8783611221131242726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67eda399aae86874dafc08ef97a4e399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fondamentalFactorsDirectImpact:
+  - 5
+  - 5
+  - 5
