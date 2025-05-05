@@ -3,7 +3,27 @@ guid: c68c3afd3b8d6eb4fb4c5228638296f7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fenetres
+    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Murs
+    second: {fileID: 2100000, guid: e6a11c5ff99e4fe4886fa947825134bf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toits
+    second: {fileID: 2100000, guid: c6acee2ddbaa97e4294404b3cff84933, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: porte
+    second: {fileID: 2100000, guid: d452b449a79966d4589ae91d79ce23ba, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
