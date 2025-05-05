@@ -4,6 +4,8 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
 
+    public bool canBeSnap;
+
     //--------------------------------------- effet imm�diat de placement ---
     public void PlacementEffects()
     {

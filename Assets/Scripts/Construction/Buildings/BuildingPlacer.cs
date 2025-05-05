@@ -30,6 +30,7 @@ public class BuildingPlacer : MonoBehaviour
     private bool snapRotationEnabled = false; //système de crantage
     public float snapAngle = 30f; //degré de crantage
     public bool gridPlacementEnabled;
+    private GameObject snappedTarget = null; // autre batiment avec lequel il se snap
 
     //paramétrage libre
     public float gridSize = 1f; //taille de la grille
@@ -125,6 +126,69 @@ public class BuildingPlacer : MonoBehaviour
             //définition de la position et rotation
             previewInstance.transform.position = targetPosition;
             previewInstance.transform.rotation = Quaternion.Euler(0, rotationY, 0);
+
+            // ---------- SNAP SYSTEM ----------
+            Building buildingComponent = previewInstance.GetComponent<Building>();
+            if (buildingComponent != null && buildingComponent.canBeSnap)
+            {
+                Transform myLeft = previewInstance.transform.Find("SnapPointLeft");
+                Transform myRight = previewInstance.transform.Find("SnapPointRight");
+                if (myLeft == null || myRight == null) return;
+
+                float snapRange = 1f;
+                Transform targetPoint = null;
+                Transform mySnap = null;
+                float closestDistance = Mathf.Infinity;
+
+                Collider[] hitColliders = Physics.OverlapBox(
+                    previewInstance.transform.position,
+                    previewInstance.GetComponent<Collider>().bounds.extents,
+                    previewInstance.transform.rotation);
+
+                foreach (var col in hitColliders)
+                {
+                    if (col.gameObject == previewInstance) continue;
+
+                    Building other = col.GetComponent<Building>();
+                    if (other != null && other.canBeSnap)
+                    {
+                        Transform otherLeft = other.transform.Find("SnapPointLeft");
+                        Transform otherRight = other.transform.Find("SnapPointRight");
+                        if (otherLeft == null || otherRight == null) continue;
+
+                        float distLeftRight = Vector3.Distance(myLeft.position, otherRight.position);
+                        float distRightLeft = Vector3.Distance(myRight.position, otherLeft.position);
+
+                        if (distLeftRight < snapRange && distLeftRight < closestDistance)
+                        {
+                            closestDistance = distLeftRight;
+                            mySnap = myLeft;
+                            targetPoint = otherRight;
+                        }
+
+                        if (distRightLeft < snapRange && distRightLeft < closestDistance)
+                        {
+                            closestDistance = distRightLeft;
+                            mySnap = myRight;
+                            targetPoint = otherLeft;
+                        }
+                    }
+                }
+
+                if (targetPoint != null && mySnap != null)
+                {
+                    Vector3 offset = mySnap.position - previewInstance.transform.position;
+                    previewInstance.transform.position = targetPoint.position - offset;
+                }
+                else
+                {
+                    previewInstance.transform.position = targetPosition;
+                }
+            }
+
+
+
+
         }
     }
 
