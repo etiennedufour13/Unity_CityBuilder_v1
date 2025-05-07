@@ -10,6 +10,7 @@ public class CityFactors : MonoBehaviour
         public float valeurInitiale;
         public float currentValeur;
         public float dynamique;
+        public bool isAffectedByDynamics;
         public Slider slider;
         public TMPro.TextMeshProUGUI text;
     }
@@ -51,9 +52,14 @@ public class CityFactors : MonoBehaviour
     }
 
     // ------------------------------------------- Actions ---
+    //les dynamiques impactent le facteur
     public void ApplyDynamicsToFactors(){
         for (int i = 0; i < cityFactors.Length; i++)
         {
+            // n'impact pas le facteur si la bool est inactive
+            if (!cityFactors[i].isAffectedByDynamics)
+                continue;
+
             float currentDynamic = cityFactors[i].dynamique;
             float currentValeurFactor = cityFactors[i].currentValeur;
 
@@ -87,6 +93,15 @@ public class CityFactors : MonoBehaviour
             currentDySante += b.GetDySanteFactor();
         }
         ReplaceDyFactor(4, currentDySante);
+
+        //approvisionnement status
+        float currentDyApprovisionnement = 0f;
+        EffetApprovisionnement[] effetsApprovisionnement = FindObjectsOfType<EffetApprovisionnement>();
+        foreach (EffetApprovisionnement b in effetsApprovisionnement)
+        {
+            currentDyApprovisionnement += b.GetDySanteFactor();
+        }
+        ReplaceDyFactor(6, currentDyApprovisionnement);
     }
 
     // ------------------------------------------- Visual ---

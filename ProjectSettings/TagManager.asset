@@ -9,6 +9,7 @@ TagManager:
   - Tree
   - Grass
   - PreviewBuilding
+  - Building3D
   layers:
   - Default
   - TransparentFX

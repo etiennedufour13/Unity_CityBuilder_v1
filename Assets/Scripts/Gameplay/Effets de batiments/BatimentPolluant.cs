@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class BatimentPolluant : MonoBehaviour, IBuildingEffect
