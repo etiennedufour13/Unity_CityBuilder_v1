@@ -8,6 +8,7 @@ public class BuildingPlacer : MonoBehaviour
 {
     //autre
     private Camera cam;
+    public Color obstructColor;
 
     //layers et tags
     public LayerMask groundLayer;
@@ -24,7 +25,7 @@ public class BuildingPlacer : MonoBehaviour
     int buildingWidth, buildingLength; // utilisé pour la grille
     private bool waitForRotation; //bool qui stock que l'ont veut une grid mais pas le temps de la rotation (sinon c'est dégeu)
     private GridVisualizer gridVisualizer;
-    private GameObject previewInstance;
+    public GameObject previewInstance;
 
     //contraintes de placement
     private bool snapRotationEnabled = false; //système de crantage
@@ -213,7 +214,7 @@ public class BuildingPlacer : MonoBehaviour
         }
 
         isValidPlacement = overlappingObjects.Count == 0;
-        if (materialController != null) materialController.SetCollisionState(!isValidPlacement);
+        if (materialController != null) materialController.SetOutline(!isValidPlacement, obstructColor);
     }
 
     void HandleRotation()
