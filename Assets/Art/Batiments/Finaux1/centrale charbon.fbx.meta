@@ -3,7 +3,37 @@ guid: 08a9bb898c6a7064492c91ad13fdf4c0
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: beton
+    second: {fileID: 2100000, guid: ea3d782f0bf7a3f47842dfe684861c39, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grosse cheminee
+    second: {fileID: 2100000, guid: d0023957ba6e97a4e93249168fcf2e53, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: murs
+    second: {fileID: 2100000, guid: e6a11c5ff99e4fe4886fa947825134bf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: toit
+    second: {fileID: 2100000, guid: fdb29c29c0d8bd94298da03d729f4436, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: toit terrace
+    second: {fileID: 2100000, guid: cd2931b831849d148b7d8450d75dc46d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vitres
+    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

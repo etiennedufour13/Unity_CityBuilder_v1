@@ -3,7 +3,42 @@ guid: ffd32b013858a6b418ee0d3301bd3406
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mur1
+    second: {fileID: 2100000, guid: 4a5fa78a1ea2409478c35af37ba99f73, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: murs
+    second: {fileID: 2100000, guid: e6a11c5ff99e4fe4886fa947825134bf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: porte
+    second: {fileID: 2100000, guid: 31bd7e879c343cb448c40f49e81513e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: toit
+    second: {fileID: 2100000, guid: 0de071fb91e9d6141bbeba54d7f545b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: toit terrace
+    second: {fileID: 2100000, guid: cd2931b831849d148b7d8450d75dc46d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: toit3
+    second: {fileID: 2100000, guid: c6acee2ddbaa97e4294404b3cff84933, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vitres
+    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

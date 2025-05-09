@@ -34,6 +34,7 @@ public class EffetApprovisionnement : MonoBehaviour, IBuildingEffect
     {
         //d�sactive le visuel du radius d'impact
         if (indirectDyApprovisionnementZone != null) indirectDyApprovisionnementZone.SetActive(false);
+        ClearAllOutlines();
 
         //les impacts directs
     }

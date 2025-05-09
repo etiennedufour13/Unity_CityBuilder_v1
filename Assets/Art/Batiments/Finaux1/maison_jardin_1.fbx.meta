@@ -17,6 +17,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: porte
+    second: {fileID: 2100000, guid: 31bd7e879c343cb448c40f49e81513e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: taules
+    second: {fileID: 2100000, guid: 5d3737685e4b1d24ab717694dbc9b215, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: toit
     second: {fileID: 2100000, guid: fdb29c29c0d8bd94298da03d729f4436, type: 2}
   - first:
