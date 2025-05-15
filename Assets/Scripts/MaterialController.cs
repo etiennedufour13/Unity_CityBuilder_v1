@@ -3,7 +3,7 @@ using UnityEngine;
 public class MaterialController : MonoBehaviour
 {
     private GameObject outlineObject, filterObject;
-    public Color hoverColor;
+    //public Color hoverColor;
 
 
     void Start()
@@ -12,7 +12,7 @@ public class MaterialController : MonoBehaviour
         filterObject = transform.Find("Filtre")?.gameObject;
     }
 
-    public void SetOutline(bool OnOff, Color color)
+    public void SetOutline(bool OnOff, Color colorOutline, Color colorFiltre)
     {
         if (outlineObject != null && filterObject != null){
             // outline
@@ -22,7 +22,7 @@ public class MaterialController : MonoBehaviour
 
             for (int i = 0; i < outlineMaterials.Length; i++)
             {
-                outlineMaterials[i].SetColor("_OutlineColor", color);
+                outlineMaterials[i].SetColor("_OutlineColor", colorOutline);
             }
             outLineRenderer.materials = outlineMaterials;
 
@@ -33,7 +33,7 @@ public class MaterialController : MonoBehaviour
 
             for (int i = 0; i < filtreMaterials.Length; i++)
             {
-                filtreMaterials[i].SetColor("_OutlineColor", color);
+                filtreMaterials[i].SetColor("_OutlineColor", colorFiltre);
             }
             filtreRenderer.materials = filtreMaterials;
         }

@@ -282,6 +282,8 @@ MonoBehaviour:
   indirectDyApprovisionnementRadius: 0
   dyApprovisionnementImpact: 0
   indirectDyApprovisionnementZone: {fileID: 0}
+  zoneOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  zoneFiltreColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &357473747534560392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb75df412b78174a9349d08987d85d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverColor: {r: 0, g: 0, b: 0, a: 0}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &8869069074428809808
 GameObject:
   m_ObjectHideFlags: 0

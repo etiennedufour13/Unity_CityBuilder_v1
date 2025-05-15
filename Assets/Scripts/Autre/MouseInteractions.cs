@@ -4,7 +4,7 @@ public class MouseInteractions : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private BuildingPlacer buildingPlacer;
-    [SerializeField] private Color hoverColor;
+    [SerializeField] private Color hoverOutlineColor, hoverFiltreColor;
 
     private GameObject lastBuildingHit;
 
@@ -29,7 +29,7 @@ public class MouseInteractions : MonoBehaviour
                     MaterialController matController = hitObject.GetComponent<MaterialController>();
                     if (matController != null)
                     {
-                        matController.SetOutline(true, hoverColor);
+                        matController.SetOutline(true, hoverOutlineColor, hoverFiltreColor);
                         lastBuildingHit = hitObject;
                     }
                 }
@@ -52,7 +52,7 @@ public class MouseInteractions : MonoBehaviour
             MaterialController matController = lastBuildingHit.GetComponent<MaterialController>();
             if (matController != null)
             {
-                matController.SetOutline(false, hoverColor);
+                matController.SetOutline(false, hoverOutlineColor, hoverFiltreColor);
             }
 
             lastBuildingHit = null;

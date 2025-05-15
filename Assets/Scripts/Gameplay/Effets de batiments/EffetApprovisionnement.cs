@@ -17,7 +17,7 @@ public class EffetApprovisionnement : MonoBehaviour, IBuildingEffect
 
     //gestion visuelle de la zone
     private bool zoneActive = true;
-    public Color zoneColor;
+    public Color zoneOutlineColor, zoneFiltreColor;
     private HashSet<GameObject> buildingsInZone = new HashSet<GameObject>();
 
 
@@ -85,7 +85,7 @@ public class EffetApprovisionnement : MonoBehaviour, IBuildingEffect
                 {
                     MaterialController mc = obj.GetComponent<MaterialController>();
                     if (mc != null)
-                        mc.SetOutline(true, zoneColor);
+                        mc.SetOutline(true, zoneOutlineColor, zoneFiltreColor);
                 }
             }
         }
@@ -97,7 +97,7 @@ public class EffetApprovisionnement : MonoBehaviour, IBuildingEffect
             {
                 MaterialController mc = obj.GetComponent<MaterialController>();
                 if (mc != null)
-                    mc.SetOutline(false, zoneColor);
+                    mc.SetOutline(false, zoneOutlineColor, zoneFiltreColor);
             }
         }
 
@@ -112,7 +112,7 @@ public class EffetApprovisionnement : MonoBehaviour, IBuildingEffect
         {
             MaterialController mc = obj.GetComponent<MaterialController>();
             if (mc != null)
-                mc.SetOutline(false, zoneColor);
+                mc.SetOutline(false, zoneOutlineColor, zoneFiltreColor);
         }
 
         buildingsInZone.Clear();

@@ -8,7 +8,7 @@ public class BuildingPlacer : MonoBehaviour
 {
     //autre
     private Camera cam;
-    public Color obstructColor;
+    public Color obstructOutlineColor, obstructFiltreColor;
 
     //layers et tags
     public LayerMask groundLayer;
@@ -214,7 +214,7 @@ public class BuildingPlacer : MonoBehaviour
         }
 
         isValidPlacement = overlappingObjects.Count == 0;
-        if (materialController != null) materialController.SetOutline(!isValidPlacement, obstructColor);
+        if (materialController != null) materialController.SetOutline(!isValidPlacement, obstructOutlineColor, obstructFiltreColor);
     }
 
     void HandleRotation()
