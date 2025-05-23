@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d0c81cb0df50446a811ab7e658d3b8, type: 3}
+  m_Name: BuildingTest1_white
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3198714811327128189, guid: da68a8fb618ddea4c8cb83a536ac3920, type: 3}
+  buildingName: BuildingTest1
+  gridWidth: 2
+  gridLength: 2
