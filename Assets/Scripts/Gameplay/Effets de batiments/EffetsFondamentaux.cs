@@ -1,15 +1,21 @@
 using TMPro;
 using UnityEngine;
+using TMPro;
+
 
 public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
 {
     public float[] fondamentalFactorsDirectImpact;
 
+    public GameObject[] icons;
+    public Color[] iconColors;
+    private bool showPlus = false;
+
     public void ApplyEffect()
     {
         for (int i = 0; i < fondamentalFactorsDirectImpact.Length; i++) //parcours les 3 facteurs
         {
-            //s'arrète si le facteur est zéro
+            //s'arrï¿½te si le facteur est zï¿½ro
             if (fondamentalFactorsDirectImpact[i] == 0) break;
 
             //modification des facteurs de la ville
@@ -19,11 +25,11 @@ public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
             Collider col = GetComponent<Collider>();
             Vector3 basePosition = col.bounds.center + new Vector3(0, col.bounds.extents.y, 0);
 
-            // Calcul direction perpendiculaire droite par rapport à la caméra
+            // Calcul direction perpendiculaire droite par rapport ï¿½ la camï¿½ra
             Vector3 camForward = Camera.main.transform.forward;
             Vector3 camRight = new Vector3(camForward.z, 0, -camForward.x).normalized;
 
-            // Application de l’offset selon facteurNumber[i]
+            // Application de lï¿½offset selon facteurNumber[i]
             float offsetDistance = 1.5f;
             int offsetDir = i - 1; // -1 = gauche, 0 = neutre, 1 = droite
             Vector3 offset = camRight * offsetDistance * offsetDir;
@@ -33,7 +39,7 @@ public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
             GameObject instance = Instantiate(PrefabManager.Instance.mainFactorIcon[i], spawnPosition, Quaternion.identity);
             Destroy(instance, 1f);
 
-            // Scale proportionnelle à la valeur absolue
+            // Scale proportionnelle ï¿½ la valeur absolue
             float minScale = 0.85f;
             float maxScale = 1.15f;
             float valueAbs = Mathf.Abs(fondamentalFactorsDirectImpact[i]);
@@ -41,11 +47,11 @@ public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
             instance.transform.GetChild(0).localScale *= scale; //enfant1
             instance.transform.GetChild(1).localScale *= scale; //enfant2
 
-            // Récupération du Text enfant
+            // Rï¿½cupï¿½ration du Text enfant
             Transform textChild = instance.transform.Find("Text");
             if (textChild != null)
             {
-                // Désactivation si valeur absolue == 1
+                // Dï¿½sactivation si valeur absolue == 1
                 textChild.gameObject.SetActive(valueAbs != 1);
 
                 // Modification du texte
@@ -59,7 +65,40 @@ public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
                 }
             }
 
+            //lance l'anim des icones
+            icons[i].GetComponent<IconAnimation>().StartAnimation();
+
         }
 
+    }
+
+
+    void Start()
+    {
+        for (int i = 0; i < icons.Length; i++)
+        {
+            if (i >= iconColors.Length || i >= fondamentalFactorsDirectImpact.Length) break;
+
+            SpriteRenderer sr = icons[i].GetComponent<SpriteRenderer>();
+            if (sr != null) sr.color = iconColors[i];
+
+            Transform child = icons[i].transform.childCount > 0 ? icons[i].transform.GetChild(0) : null;
+            if (child != null)
+            {
+                TextMeshPro tmp = child.GetComponent<TextMeshPro>();
+                if (tmp != null)
+                {
+                    if (fondamentalFactorsDirectImpact[i] > 0 && showPlus)
+                    {
+                        tmp.text = "+" + fondamentalFactorsDirectImpact[i].ToString();
+                    }
+                    else
+                    {
+                        tmp.text = fondamentalFactorsDirectImpact[i].ToString();
+                    }
+                }
+
+            }
+        }
     }
 }
