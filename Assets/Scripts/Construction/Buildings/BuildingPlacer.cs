@@ -20,6 +20,7 @@ public class BuildingPlacer : MonoBehaviour
     private bool isValidPlacement = false;
     private MaterialController materialController;
     private HashSet<GameObject> overlappingObjects = new HashSet<GameObject>();
+    public HashSet<GameObject> overlappingTrees = new HashSet<GameObject>();
     private float rotationY = 0f;
     float targetRotationY; // pour stocket la rotation de manière temporaire
     int buildingWidth, buildingLength; // utilisé pour la grille
@@ -196,7 +197,6 @@ public class BuildingPlacer : MonoBehaviour
     private void CheckOverlapingPlacement()
     {
         //affichage des objets overlappés
-        overlappingObjects.Clear();
         BoxCollider boxCol = previewInstance.GetComponent<BoxCollider>();
         if (boxCol != null)
         {
@@ -210,11 +210,48 @@ public class BuildingPlacer : MonoBehaviour
                 {
                     overlappingObjects.Add(hitCol.gameObject);
                 }
+                if (vegetauxTags.Contains(hitCol.tag))
+                {
+                    overlappingTrees.Add(hitCol.gameObject);
+                }
             }
         }
 
+        // set l'état de placement valid et la couleur de l'objet en placement
         isValidPlacement = overlappingObjects.Count == 0;
         if (materialController != null) materialController.SetOutline(!isValidPlacement, obstructOutlineColor, obstructFiltreColor);
+
+        //set la couleur des autres building en contact
+
+        overlappingObjects.Clear(); //vide le tout
+
+        //set la couleur des arbres en contact
+        OverlapingTrees();
+    }
+
+    void OverlapingTrees()
+    {
+        // Stock temporaire pour gérer les arbres en contact
+        HashSet<GameObject> arbresActuels = new HashSet<GameObject>(overlappingTrees);
+
+        // Activation du filtre pour les arbres en contact
+        foreach (GameObject arbre in arbresActuels)
+        {
+            Transform filtre = arbre.transform.Find("Filtre");
+            if (filtre != null) filtre.gameObject.SetActive(true);
+        }
+
+        // Désactivation du filtre pour les arbres non touchés
+        foreach (GameObject arbre in GameObject.FindObjectsOfType<GameObject>())
+        {
+            if (vegetauxTags.Contains(arbre.tag) && !arbresActuels.Contains(arbre))
+            {
+                Transform filtre = arbre.transform.Find("Filtre");
+                if (filtre != null) filtre.gameObject.SetActive(false);
+            }
+        }
+
+        overlappingTrees.Clear(); // vide le tout
     }
 
     void HandleRotation()
