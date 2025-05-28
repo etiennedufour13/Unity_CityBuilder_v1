@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ce4f9ba2e8ec3d643b5b9cc1857817eb
+guid: d98f469a027f3c542bca368b4e7e6a0f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BetonMat.001
+      name: Grass
+    second: {fileID: 2100000, guid: dff3ee6792b9c1541bead174ab6e3da9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RoadTexture
+    second: {fileID: 2100000, guid: 7fa7d4bc639a9b74d877881e9e5d263f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bridge
+    second: {fileID: 2100000, guid: e6a11c5ff99e4fe4886fa947825134bf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: road base
     second: {fileID: 2100000, guid: 954a5773e8db968418cde4e1349daaac, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: GroundMat.002
-    second: {fileID: 2100000, guid: dff3ee6792b9c1541bead174ab6e3da9, type: 2}
+      name: road top
+    second: {fileID: 2100000, guid: 53cc7565746668f48b11b5fe6258ac64, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

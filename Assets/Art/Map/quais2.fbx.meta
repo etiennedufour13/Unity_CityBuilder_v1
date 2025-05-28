@@ -8,12 +8,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: BetonMat
-    second: {fileID: 2100000, guid: d452b449a79966d4589ae91d79ce23ba, type: 2}
+    second: {fileID: 2100000, guid: 954a5773e8db968418cde4e1349daaac, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: GroundMat
-    second: {fileID: 2100000, guid: f51349fdd010a79438eda1c0155e067c, type: 2}
+      name: GroundMat.001
+    second: {fileID: 2100000, guid: dff3ee6792b9c1541bead174ab6e3da9, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
