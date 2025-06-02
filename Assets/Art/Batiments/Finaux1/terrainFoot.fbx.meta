@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c507a344930148a4d9094e3309981999
+guid: 4e921e760573a7a44af89a41f84a514e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Fenetres
-    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
+      name: Ground terrain
+    second: {fileID: 2100000, guid: dff3ee6792b9c1541bead174ab6e3da9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Murs
+      name: mur2
     second: {fileID: 2100000, guid: 352b2abac3912b04d85ca85658439d33, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: murs
+    second: {fileID: 2100000, guid: e6a11c5ff99e4fe4886fa947825134bf, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -28,12 +33,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: toit
-    second: {fileID: 2100000, guid: c6acee2ddbaa97e4294404b3cff84933, type: 2}
+    second: {fileID: 2100000, guid: 0de071fb91e9d6141bbeba54d7f545b2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: toit terrace
-    second: {fileID: 2100000, guid: cd2931b831849d148b7d8450d75dc46d, type: 2}
+      name: toit3
+    second: {fileID: 2100000, guid: fdb29c29c0d8bd94298da03d729f4436, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vitres
+    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -65,7 +75,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.8
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -120,7 +130,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.8
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

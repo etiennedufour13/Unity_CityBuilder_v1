@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c507a344930148a4d9094e3309981999
+guid: 93bdb0bb038d3844387d5cc5f0672fdd
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,33 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Fenetres
-    second: {fileID: 2100000, guid: 78ad0d869c8b75249b96dba7e38ed052, type: 2}
+      name: Leaves
+    second: {fileID: 2100000, guid: e701bdda45277284983a41c50b62cbdf, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Murs
-    second: {fileID: 2100000, guid: 352b2abac3912b04d85ca85658439d33, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: porte
-    second: {fileID: 2100000, guid: 31bd7e879c343cb448c40f49e81513e7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: taules
-    second: {fileID: 2100000, guid: 5d3737685e4b1d24ab717694dbc9b215, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: toit
-    second: {fileID: 2100000, guid: c6acee2ddbaa97e4294404b3cff84933, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: toit terrace
-    second: {fileID: 2100000, guid: cd2931b831849d148b7d8450d75dc46d, type: 2}
+      name: Tronc
+    second: {fileID: 2100000, guid: a4ca74daa85eafe44a4c7610940c0861, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
