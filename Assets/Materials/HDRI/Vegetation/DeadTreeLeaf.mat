@@ -23,7 +23,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TreeLeaf
+  m_Name: DeadTreeLeaf
   m_Shader: {fileID: -6465566751694194690, guid: 41f80c142cd7fd24e98fc2afa5c2f8d4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -125,7 +125,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 2079020a9208b694ab9543cbf19814a2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 23041f05ae179434fa19ebda640d3d09, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
@@ -168,7 +168,7 @@ Material:
     - _AlphaRemapMax: 1
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
-    - _Alpha_Treshold: 0.1
+    - _Alpha_Treshold: 0.93
     - _Anisotropy: 0
     - _BendStrength: 2.5
     - _BlendMode: 0
@@ -199,7 +199,7 @@ Material:
     - _EnableFogOnTransparent: 0
     - _EnableGeometricSpecularAA: 0
     - _EndFondu: 4
-    - _EndThershold: 0.1
+    - _EndThershold: 0.92
     - _EnergyConservingSpecularColor: 1
     - _ExcludeFromTUAndAA: 0
     - _HeightAmplitude: 0.02
@@ -246,7 +246,7 @@ Material:
     - _Speed: 0.05
     - _SrcBlend: 1
     - _StartFondu: 2
-    - _StartThershold: 0.1
+    - _StartThershold: 0.4
     - _StencilRef: 0
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4
@@ -263,7 +263,7 @@ Material:
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
-    - _TimeForDegenerecence: 9999999
+    - _TimeForDegenerecence: 20
     - _TransmissionEnable: 1
     - _TransmissionMask: 1
     - _TransparentBackfaceEnable: 0
@@ -289,10 +289,10 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BendDirection: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 0.487718, g: 0.75471693, b: 0.63437945, a: 1}
-    - _Color1: {r: 0.29036134, g: 0.7075471, b: 0.5037519, a: 1}
-    - _Color1Dead: {r: 0.2028302, g: 1, b: 0.6089356, a: 1}
-    - _Color2: {r: 0.454902, g: 0.8117648, b: 0.5176471, a: 1}
-    - _Color2Dead: {r: 0.454902, g: 0.8117648, b: 0.5176471, a: 1}
+    - _Color1: {r: 0.29036137, g: 0.7075472, b: 0.5037519, a: 1}
+    - _Color1Dead: {r: 0.5062664, g: 0.509434, b: 0.43974727, a: 1}
+    - _Color2: {r: 0.4554112, g: 0.8113208, b: 0.51939493, a: 1}
+    - _Color2Dead: {r: 0.754717, g: 0.66323316, b: 0.43787825, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
