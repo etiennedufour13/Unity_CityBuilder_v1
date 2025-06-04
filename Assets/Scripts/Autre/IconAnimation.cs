@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class IconAnimation : MonoBehaviour
@@ -25,6 +25,8 @@ public class IconAnimation : MonoBehaviour
 
     private SpriteRenderer sr;
 
+    TextMeshPro text;
+
     public FloatMotion floatMotion;
     private bool isActive;
 
@@ -36,6 +38,8 @@ public class IconAnimation : MonoBehaviour
         waitTime = Random.Range(minWaitTime, maxWaitTime);
 
         sr = GetComponent<SpriteRenderer>();
+        text = GetComponentInChildren<TextMeshPro>();
+
         targetLocalPosition = transform.localPosition;
         targetScale = transform.localScale;
         targetOpacity = 1f;
@@ -49,7 +53,6 @@ public class IconAnimation : MonoBehaviour
         targetScale *= .8f;
          //pour laisser le temps à waitTime de se définir
         yield return new WaitForSeconds(waitTime);
-        Debug.Log("Il s'est passé " +  waitTime);
 
         targetLocalPosition += new Vector3(0, moveHeight, -0.3f*moveHeight);
         yield return new WaitForSeconds(.2f);
@@ -58,6 +61,10 @@ public class IconAnimation : MonoBehaviour
         yield return new WaitForSeconds(.5f);
 
         targetOpacity = 0f;
+        text.color = new Color(text.color.r, text.color.g, text.color.b, 0f);
+        yield return new WaitForSeconds(.3f);
+
+        gameObject.SetActive(false);
     }
 
     void Update()
@@ -79,6 +86,7 @@ public class IconAnimation : MonoBehaviour
     public void StartAnimation(){
         floatMotion.isActive = false;
         isActive = true;
+        Debug.Log("l'anim se lance de " + gameObject.name);
 
         StartCoroutine(Animate());
     }

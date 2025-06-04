@@ -30,6 +30,11 @@ public class CameraController : MonoBehaviour
         HandlePanning();
     }
 
+    public void Relocate() {
+        transform.position = new Vector3(0, 8, 0);
+        transform.eulerAngles = new Vector3(20, -130, 0);
+    }
+
     void HandleZoom()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");

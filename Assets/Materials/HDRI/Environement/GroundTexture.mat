@@ -117,7 +117,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture3:
-        m_Texture: {fileID: 2800000, guid: 06565fdfb1a993a4b942a69345121d4c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5ebbe363051e1f544b223c618e952b67, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture4:
@@ -195,7 +195,7 @@ Material:
     - _ExcludeFromTUAndAA: 0
     - _FacteurScale: 0.03
     - _FacteurScale2: 0.15
-    - _FacteurScale3: 0.03
+    - _FacteurScale3: 0.06
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0

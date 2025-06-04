@@ -18,7 +18,7 @@ TagManager:
   - Water
   - UI
   - TopIcons
-  - 
+  - TopTopIcons
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Icons
+    uniqueID: 1748650449
     locked: 0
