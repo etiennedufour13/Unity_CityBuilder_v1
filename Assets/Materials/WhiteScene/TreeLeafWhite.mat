@@ -173,6 +173,8 @@ Material:
     - _BendStrength: 2.5
     - _BlendMode: 0
     - _CoatMask: 0
+    - _CoefDegenerecenceMax: 1
+    - _CoefDegenerecenceMin: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 0
     - _CullModeForward: 0
@@ -199,6 +201,7 @@ Material:
     - _EnableFogOnTransparent: 0
     - _EnableGeometricSpecularAA: 0
     - _EndFondu: 4
+    - _EndThershold: 0.1
     - _EnergyConservingSpecularColor: 1
     - _ExcludeFromTUAndAA: 0
     - _HeightAmplitude: 0.02
@@ -245,6 +248,7 @@ Material:
     - _Speed: 0.05
     - _SrcBlend: 1
     - _StartFondu: 2
+    - _StartThershold: 0.1
     - _StencilRef: 0
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4
@@ -261,6 +265,7 @@ Material:
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
+    - _TimeForDegenerecence: 9999999
     - _TransmissionEnable: 1
     - _TransmissionMask: 1
     - _TransparentBackfaceEnable: 0
@@ -286,8 +291,10 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BendDirection: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 0.487718, g: 0.75471693, b: 0.63437945, a: 1}
-    - _Color1: {r: 0.745283, g: 0.7189169, b: 0.6925507, a: 1}
-    - _Color2: {r: 0.8679245, g: 0.84843713, b: 0.7983268, a: 1}
+    - _Color1: {r: 0.41509432, g: 0.3933606, b: 0.3426486, a: 1}
+    - _Color1Dead: {r: 0.6509804, g: 0.6392157, b: 0.6117647, a: 1}
+    - _Color2: {r: 0.46226418, g: 0.45670393, b: 0.4251958, a: 1}
+    - _Color2Dead: {r: 0.9056604, g: 0.8904415, b: 0.8244927, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
