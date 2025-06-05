@@ -16,7 +16,7 @@ public class EffetsFondamentaux : MonoBehaviour, IBuildingEffect
         for (int i = 0; i < fondamentalFactorsDirectImpact.Length; i++) //parcours les 3 facteurs
         {
             //s'arr�te si le facteur est z�ro
-            if (fondamentalFactorsDirectImpact[i] == 0) break;
+            //if (fondamentalFactorsDirectImpact[i] == 0) break;
 
             //modification des facteurs de la ville
             CityFactors.Instance.ModifyFactor(i, fondamentalFactorsDirectImpact[i]);
